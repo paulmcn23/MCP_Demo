@@ -1,5 +1,7 @@
 # AGENTS.md — MCP_Demo
 
+> Last verified: 2026-05-02
+
 ## Overview
 Interactive slide deck presentation explaining the Model Context Protocol (MCP) to Cloudflare Solutions Engineers. Deployed as a Cloudflare Worker serving a single-page HTML app.
 
