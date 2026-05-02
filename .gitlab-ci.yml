@@ -1,0 +1,22 @@
+include:
+  - component: $CI_SERVER_FQDN/cloudflare/ci/ai/opencode@~latest
+    inputs:
+      stage: review
+      runOnMR: true
+      MULTIPLE_COMMENTS: true
+
+stages:
+  - review
+  - deploy
+
+deploy_production:
+  stage: deploy
+  image: node:20
+  script:
+    - npm ci
+    - npx wrangler deploy
+  only:
+    - main
+  variables:
+    CLOUDFLARE_API_TOKEN: $CLOUDFLARE_API_TOKEN
+    CLOUDFLARE_ACCOUNT_ID: $CLOUDFLARE_ACCOUNT_ID
