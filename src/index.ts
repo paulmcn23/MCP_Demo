@@ -165,6 +165,28 @@ const html = `<!DOCTYPE html>
     </div>
   </div>
   <p style="text-align:center;font-size:0.85rem;opacity:0.5;margin-top:1rem;">MCP gives AI systems access to <strong>databases, file systems, APIs, and tools</strong> in a standardised way.</p>
+  <div style="display:flex;align-items:center;gap:0.8rem;margin-top:1.2rem;justify-content:center;flex-wrap:wrap;">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:0.3rem;">
+      <span style="font-size:1.3rem;">🤖</span><span style="font-size:0.6rem;opacity:0.4;">Claude</span>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:0.3rem;">
+      <span style="font-size:1.3rem;">💻</span><span style="font-size:0.6rem;opacity:0.4;">Cursor</span>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:0.3rem;">
+      <span style="font-size:1.3rem;">🏄</span><span style="font-size:0.6rem;opacity:0.4;">Windsurf</span>
+    </div>
+    <div style="background:linear-gradient(135deg,#2dd4bf,#34d399);color:#111;font-weight:800;font-size:0.7rem;padding:0.5rem 1rem;border-radius:10px;margin:0 0.5rem;box-shadow:0 0 20px #2dd4bf33;">🔌 MCP</div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:0.3rem;">
+      <span style="font-size:1.3rem;">📁</span><span style="font-size:0.6rem;opacity:0.4;">Files</span>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:0.3rem;">
+      <span style="font-size:1.3rem;">🐙</span><span style="font-size:0.6rem;opacity:0.4;">GitHub</span>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:0.3rem;">
+      <span style="font-size:1.3rem;">🗄️</span><span style="font-size:0.6rem;opacity:0.4;">Databases</span>
+    </div>
+  </div>
+  <p style="text-align:center;font-size:0.72rem;opacity:0.3;margin-top:0.4rem;">Think of MCP as the <strong>USB-C port</strong> for AI — one standard connection for everything</p>
 </div>
 
 <!-- ═══════ SLIDE 3 — Architecture Overview ═══════ -->
@@ -294,6 +316,9 @@ const html = `<!DOCTYPE html>
     &nbsp;&nbsp;]<br>
     }
   </div>
+  <div style="background:#2dd4bf0d;border:1px solid #2dd4bf33;border-radius:12px;padding:0.8rem 1.2rem;max-width:620px;width:100%;margin-top:0.8rem;text-align:center;">
+    <p style="font-size:0.8rem;">🔍 <strong class="teal">Dynamic Discovery</strong> — The AI asks the server <em>"what can you do?"</em> at runtime. No hardcoded knowledge needed — new capabilities are picked up automatically.</p>
+  </div>
 </div>
 
 <!-- ═══════ SLIDE 7 — Client Primitives ═══════ -->
@@ -405,6 +430,9 @@ const html = `<!DOCTYPE html>
       <div class="card-icon">🌍</div><h3>Open Source</h3>
       <p>SDKs in TypeScript, Python, and more. Accessible to all.</p>
     </div>
+  </div>
+  <div style="background:#27272d;border:1px solid #35353d;border-radius:12px;padding:0.6rem 1.2rem;max-width:700px;width:100%;margin-top:0.8rem;text-align:center;">
+    <p style="font-size:0.78rem;opacity:0.6;">💡 MCP doesn't replace APIs — it's an <strong>AI-friendly layer on top</strong>. Under the hood, MCP servers are often wrappers around existing REST APIs.</p>
   </div>
   <div style="margin-top:1.2rem;text-align:center;">
     <p style="font-size:0.9rem;margin-bottom:0.6rem;">
