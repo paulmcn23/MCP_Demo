@@ -199,7 +199,16 @@ const html = `<!DOCTYPE html>
       <div class="usb-item right"><span class="icon">🗄️</span> Databases</div>
     </div>
   </div>
-  <p style="text-align:center;font-size:0.85rem;opacity:0.5;">Build the server once → every MCP client can use it</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;max-width:750px;width:100%;margin-top:1rem;">
+    <div style="background:#18181b;border:1px solid #f8717144;border-radius:12px;padding:1rem 1.2rem;">
+      <h3 style="font-size:0.85rem;color:#f87171;margin-bottom:0.4rem;">❌ Before MCP</h3>
+      <p style="font-size:0.78rem;opacity:0.65;line-height:1.6;">An AI agent needing a calculator, a web browser, then a spreadsheet required unique, custom-built adapters for each — like learning a new language for every single tool.</p>
+    </div>
+    <div style="background:#18181b;border:1px solid #34d39944;border-radius:12px;padding:1rem 1.2rem;">
+      <h3 style="font-size:0.85rem;color:#34d399;margin-bottom:0.4rem;">✅ With MCP</h3>
+      <p style="font-size:0.78rem;opacity:0.65;line-height:1.6;">MCP provides a standardised framework. An AI agent learns one way to interact, and any tool that speaks MCP connects seamlessly — dramatically reducing custom coding for every new integration.</p>
+    </div>
+  </div>
 </div>
 
 <!-- ══════════ SLIDE 3 — Architecture ══════════ -->
