@@ -435,5 +435,9 @@ const html = `<!DOCTYPE html>
   }
 </script>
 
+<footer style="position:fixed;bottom:12px;right:16px;font-size:11px;color:#555;font-family:'Inter',sans-serif;z-index:1000;">
+  Built with Cloudflare Workers · Paul McNamara
+</footer>
+
 </body>
 </html>`;
