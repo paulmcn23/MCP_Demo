@@ -1,24 +1,14 @@
-include:
-  # AI Code Review — runs on Merge Requests only
-  - component: $CI_SERVER_FQDN/cloudflare/ci/ai/opencode@~latest
-    inputs:
-      stage: review
-      runOnMR: true
-      MULTIPLE_COMMENTS: true
-
-  # Wrangler deploy — runs on main branch only
-  # Uses the new unified javascript component (wrangler2 is deprecated)
-  - component: $CI_SERVER_FQDN/cloudflare/ci/javascript/deploy@~latest
-    inputs:
-      stage: deploy
-      jobPrefix: deploy-production
-      runOnMR: false
-      runOnBranches: '^main$'
-      CLOUDFLARE_ACCOUNT_ID: $CLOUDFLARE_ACCOUNT_ID
-
 stages:
-  - review
   - deploy
 
-variables:
-  CLOUDFLARE_API_TOKEN: $CLOUDFLARE_API_TOKEN
+deploy_production:
+  stage: deploy
+  image: node:20-alpine
+  script:
+    - npm ci
+    - npx wrangler deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  variables:
+    CLOUDFLARE_API_TOKEN: $CLOUDFLARE_API_TOKEN
+    CLOUDFLARE_ACCOUNT_ID: $CLOUDFLARE_ACCOUNT_ID
