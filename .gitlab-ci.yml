@@ -7,7 +7,18 @@ include:
       MULTIPLE_COMMENTS: true
 
   # Wrangler deploy — runs on main branch only
-  - component: $CI_SERVER_FQDN/cloudflare/ci/wrangler2/publish@~latest
+  # Uses the new unified javascript component (wrangler2 is deprecated)
+  - component: $CI_SERVER_FQDN/cloudflare/ci/javascript/deploy@~latest
     inputs:
-      jobPrefix: wrangler2-production
-      runOnBranches: 'main'
+      stage: deploy
+      jobPrefix: deploy-production
+      runOnMR: false
+      runOnBranches: '^main$'
+      CLOUDFLARE_ACCOUNT_ID: $CLOUDFLARE_ACCOUNT_ID
+
+stages:
+  - review
+  - deploy
+
+variables:
+  CLOUDFLARE_API_TOKEN: $CLOUDFLARE_API_TOKEN
