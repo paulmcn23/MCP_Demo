@@ -499,6 +499,7 @@ const html = `<!DOCTYPE html>
   const counter = document.getElementById('counter');
   const progress = document.getElementById('progress');
   const INTERACTIVE_SLIDE = 8;
+  const FRAG_SLIDE = 2;
 
   for (let i = 0; i < total; i++) {
     const d = document.createElement('div');
@@ -510,6 +511,7 @@ const html = `<!DOCTYPE html>
   function goTo(n) {
     if (n < 0 || n >= total) return;
     if (current === INTERACTIVE_SLIDE && n !== INTERACTIVE_SLIDE) iReset();
+    if (current === FRAG_SLIDE && n !== FRAG_SLIDE) fReset();
     slides[current].classList.remove('active');
     dots.children[current].classList.remove('active');
     current = n;
@@ -522,6 +524,7 @@ const html = `<!DOCTYPE html>
   }
   function go(dir) {
     if (current === INTERACTIVE_SLIDE && dir === 1 && istep < 3) { iAdvance(); return; }
+    if (current === FRAG_SLIDE && dir === 1 && fstep < 2) { fAdvance(); return; }
     goTo(current + dir);
   }
 
@@ -646,6 +649,65 @@ const html = `<!DOCTYPE html>
 
   iInit();
   window.addEventListener('resize', () => { iUpdateLines(); });
+
+  /* ═══════ Slide 3 (index 2) — fragmented chain ═══════ */
+  let fstep = -1;
+  const ftag = document.getElementById('ftag');
+  const ftitle = document.getElementById('ftitle');
+  const fsub = document.getElementById('fsub');
+  const fcap = document.getElementById('fcap');
+  const frow1 = document.getElementById('frow1');
+  const frow0 = document.getElementById('frow0');
+  const frow2 = document.getElementById('frow2');
+
+  const fsteps = [
+    { tag:'The Problem', title:'Without MCP: <span class="red">Fragmented</span> AI Development',
+      cap:'Each AI app needs to build everything from scratch.',
+      run(){
+        frow1.classList.add('show');
+        document.getElementById('f1-app').classList.add('show');
+      }},
+    { tag:'Custom Everything', title:'Every Connection is <span class="red">Bespoke</span>',
+      cap:'Custom implementation, custom prompts, custom tool calls, custom data access — <strong style="color:#f87171;">for every single tool</strong>.',
+      run(){
+        const ids = ['f1-a1','f1-impl','f1-a2','f1-prompt','f1-a3','f1-tool','f1-a4','f1-data'];
+        ids.forEach((id,i) => setTimeout(() => document.getElementById(id).classList.add('show'), i * 150));
+      }},
+    { tag:'This Does Not Scale', title:'Now Multiply by <span class="red">Every AI App…</span>',
+      cap:'Each app rebuilds the same chain independently. 3 apps = <strong style="color:#f87171;">3× the work</strong>. 100 apps = chaos.',
+      run(){
+        frow0.classList.add('show');
+        frow0.querySelectorAll('.frag-box, .frag-arrow').forEach((el,i) => setTimeout(() => el.classList.add('show'), i * 80));
+        setTimeout(() => {
+          frow2.classList.add('show');
+          frow2.querySelectorAll('.frag-box, .frag-arrow').forEach((el,i) => setTimeout(() => el.classList.add('show'), i * 80));
+        }, 400);
+      }},
+  ];
+
+  function fAdvance() {
+    if (fstep >= 2) return;
+    fstep++;
+    const s = fsteps[fstep];
+    ftag.textContent = s.tag;
+    ftitle.innerHTML = s.title;
+    fcap.innerHTML = s.cap; fcap.classList.add('show');
+    for(let i=0;i<3;i++) document.getElementById('fd'+i).classList.toggle('active',i<=fstep);
+    s.run();
+  }
+
+  function fReset() {
+    fstep = -1;
+    [frow0,frow1,frow2].forEach(r => {
+      r.classList.remove('show');
+      r.querySelectorAll('.frag-box, .frag-arrow').forEach(el => el.classList.remove('show'));
+    });
+    for(let i=0;i<3;i++) document.getElementById('fd'+i).classList.remove('active');
+    ftag.textContent = 'The Problem';
+    ftitle.innerHTML = 'Without MCP: <span class="red">Fragmented</span> AI Development';
+    fsub.style.display = '';
+    fcap.innerHTML = 'Press Enter to start'; fcap.classList.remove('show');
+  }
 </script>
 
 <footer style="position:fixed;bottom:8px;right:12px;font-size:10px;color:#444;font-family:'Inter',sans-serif;z-index:100;">
