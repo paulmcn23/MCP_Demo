@@ -117,6 +117,23 @@ const html = `<!DOCTYPE html>
   .istep-caption.show { opacity:0.6; }
   .istep-hint { font-size:0.65rem; opacity:0.25; font-family:'JetBrains Mono',monospace; }
 
+  /* ── Fragmented chain (Slide 3) ── */
+  .frag-wrap { display:flex; flex-direction:column; gap:1rem; max-width:850px; width:100%; align-items:center; margin-top:0.5rem; }
+  .frag-row { display:flex; align-items:center; gap:0; opacity:0; transform:translateY(12px); transition:all 0.6s cubic-bezier(.4,0,.2,1); }
+  .frag-row.show { opacity:1; transform:translateY(0); }
+  .frag-box { padding:0.55rem 0.9rem; border-radius:10px; font-size:0.72rem; font-weight:600; white-space:nowrap; border:1.5px solid #45454d; background:#35353d; color:#e4e4e7; opacity:0; transform:scale(0.7); transition:all 0.4s cubic-bezier(.34,1.56,.64,1); }
+  .frag-box.show { opacity:1; transform:scale(1); }
+  .frag-box.app { background:#e4e4e7; color:#1e1e24; border-color:#e4e4e7; }
+  .frag-box.impl { background:#d4d4d8; color:#1e1e24; border-color:#d4d4d8; }
+  .frag-box.prompt { background:#c8b88a; color:#1e1e24; border-color:#c8b88a; }
+  .frag-box.tool { background:#a8c4b8; color:#1e1e24; border-color:#a8c4b8; }
+  .frag-box.data { background:#c75050; color:#fff; border-color:#c75050; }
+  .frag-arrow { font-size:0.7rem; color:#666; margin:0 0.3rem; opacity:0; transition:opacity 0.3s; }
+  .frag-arrow.show { opacity:1; }
+  .frag-step-bar { display:flex; align-items:center; gap:0.8rem; margin-top:0.5rem; }
+  .frag-step-dot { width:9px; height:9px; border-radius:50%; background:#3f3f46; transition:all 0.3s; }
+  .frag-step-dot.active { background:#2dd4bf; transform:scale(1.4); }
+
   /* ── Ecosystem row ── */
   .eco-row { display:flex; gap:2rem; align-items:center; justify-content:center; flex-wrap:wrap; margin:1rem 0; }
   .eco-item { display:flex; flex-direction:column; align-items:center; gap:0.3rem; }
@@ -176,51 +193,53 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 3 — The Problem ═══════ -->
+<!-- ═══════ SLIDE 3 — The Problem (Interactive) ═══════ -->
 <div class="slide" data-slide="2">
-  <span class="tag">The Problem</span>
-  <h2>Why Do We Need <span class="teal">MCP</span>?</h2>
-  <p style="text-align:center;opacity:0.6;margin-bottom:1.2rem;">Before MCP, connecting AI models to each new data source required custom implementations — which gets expensive fast.</p>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;max-width:700px;width:100%;">
-    <div style="background:#27272d;border:1px solid #f8717144;border-radius:14px;padding:1.1rem 1.3rem;">
-      <h3 style="font-size:0.85rem;color:#f87171;margin-bottom:0.4rem;">❌ Before MCP</h3>
-      <p style="font-size:0.78rem;opacity:0.6;line-height:1.6;">An AI agent needing a calculator, a web browser, then a spreadsheet required unique, custom-built adapters for each — like learning a new language for every single tool.</p>
+  <span class="tag" id="ftag">The Problem</span>
+  <h2 id="ftitle">Without MCP: <span class="red">Fragmented</span> AI Development</h2>
+  <p style="text-align:center;opacity:0.6;margin-bottom:0.8rem;" id="fsub">Press <kbd style="background:#35353d;padding:2px 8px;border-radius:4px;font-size:0.75rem;">Enter</kbd> to step through</p>
+  <div class="frag-wrap" id="frag-wrap">
+    <!-- Row 0 (AI App 1 — appears in step 3) -->
+    <div class="frag-row" id="frow0">
+      <div class="frag-box app">AI App 1</div>
+      <span class="frag-arrow">→</span>
+      <div class="frag-box impl">Custom implementation</div>
+      <span class="frag-arrow">→</span>
+      <div class="frag-box prompt">Custom prompt logic</div>
+      <span class="frag-arrow">→</span>
+      <div class="frag-box tool">Custom tool calls</div>
+      <span class="frag-arrow">→</span>
+      <div class="frag-box data">Custom data access</div>
     </div>
-    <div style="background:#27272d;border:1px solid #34d39944;border-radius:14px;padding:1.1rem 1.3rem;">
-      <h3 style="font-size:0.85rem;color:#34d399;margin-bottom:0.4rem;">✅ With MCP</h3>
-      <p style="font-size:0.78rem;opacity:0.6;line-height:1.6;">MCP provides a standardised framework. An AI agent learns one way to interact, and any tool that speaks MCP connects seamlessly — dramatically reducing custom coding.</p>
+    <!-- Row 1 (AI App 2 — shown first) -->
+    <div class="frag-row" id="frow1">
+      <div class="frag-box app" id="f1-app">AI App 2</div>
+      <span class="frag-arrow" id="f1-a1">→</span>
+      <div class="frag-box impl" id="f1-impl">Custom implementation</div>
+      <span class="frag-arrow" id="f1-a2">→</span>
+      <div class="frag-box prompt" id="f1-prompt">Custom prompt logic</div>
+      <span class="frag-arrow" id="f1-a3">→</span>
+      <div class="frag-box tool" id="f1-tool">Custom tool calls</div>
+      <span class="frag-arrow" id="f1-a4">→</span>
+      <div class="frag-box data" id="f1-data">Custom data access</div>
+    </div>
+    <!-- Row 2 (AI App 3 — appears in step 3) -->
+    <div class="frag-row" id="frow2">
+      <div class="frag-box app">AI App 3</div>
+      <span class="frag-arrow">→</span>
+      <div class="frag-box impl">Custom implementation</div>
+      <span class="frag-arrow">→</span>
+      <div class="frag-box prompt">Custom prompt logic</div>
+      <span class="frag-arrow">→</span>
+      <div class="frag-box tool">Custom tool calls</div>
+      <span class="frag-arrow">→</span>
+      <div class="frag-box data">Custom data access</div>
     </div>
   </div>
-  <p style="text-align:center;font-size:0.85rem;opacity:0.5;margin-top:1rem;">MCP gives AI systems access to <strong>databases, file systems, APIs, and tools</strong> in a standardised way.</p>
-  <div style="display:flex;align-items:center;gap:0.8rem;margin-top:1.2rem;justify-content:center;flex-wrap:wrap;">
-    <div style="display:flex;flex-direction:column;align-items:center;gap:0.3rem;">
-      <span style="font-size:1.3rem;">🤖</span><span style="font-size:0.6rem;opacity:0.4;">Claude</span>
-    </div>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:0.3rem;">
-      <span style="font-size:1.3rem;">💻</span><span style="font-size:0.6rem;opacity:0.4;">Cursor</span>
-    </div>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:0.3rem;">
-      <span style="font-size:1.3rem;">🏄</span><span style="font-size:0.6rem;opacity:0.4;">Windsurf</span>
-    </div>
-    <div style="background:linear-gradient(135deg,#2dd4bf,#34d399);color:#111;font-weight:800;font-size:0.7rem;padding:0.5rem 1rem;border-radius:10px;margin:0 0.5rem;box-shadow:0 0 20px #2dd4bf33;">🔌 MCP</div>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:0.3rem;">
-      <span style="font-size:1.3rem;">📁</span><span style="font-size:0.6rem;opacity:0.4;">Files</span>
-    </div>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:0.3rem;">
-      <span style="font-size:1.3rem;">🐙</span><span style="font-size:0.6rem;opacity:0.4;">GitHub</span>
-    </div>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:0.3rem;">
-      <span style="font-size:1.3rem;">🗄️</span><span style="font-size:0.6rem;opacity:0.4;">Databases</span>
-    </div>
-  </div>
-  <p style="text-align:center;font-size:0.72rem;opacity:0.3;margin-top:0.4rem;">Think of MCP as the <strong>USB-C port</strong> for AI — one standard connection for everything</p>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;max-width:600px;width:100%;margin-top:1rem;">
-    <div style="background:#27272d;border:1px solid #a78bfa33;border-radius:12px;padding:0.8rem 1rem;text-align:center;">
-      <p style="font-size:0.75rem;">🔍 <strong style="color:#a78bfa;">Context</strong><br><span style="opacity:0.5;font-size:0.72rem;">Pull data from Salesforce, Postgres, Drive to inform answers</span></p>
-    </div>
-    <div style="background:#27272d;border:1px solid #fbbf2433;border-radius:12px;padding:0.8rem 1rem;text-align:center;">
-      <p style="font-size:0.75rem;">⚡ <strong style="color:#fbbf24;">Action</strong><br><span style="opacity:0.5;font-size:0.72rem;">Don't just write the email — actually <em>send</em> it. Knowledge → Action.</span></p>
-    </div>
+  <div class="frag-step-bar">
+    <div class="frag-step-dot" id="fd0"></div><div class="frag-step-dot" id="fd1"></div><div class="frag-step-dot" id="fd2"></div>
+    <div class="istep-caption" id="fcap">Press Enter to start</div>
+    <div class="istep-hint">Enter / Space</div>
   </div>
 </div>
 
