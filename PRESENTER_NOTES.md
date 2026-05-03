@@ -1,6 +1,6 @@
 # MCP Explained — Presenter Script
 
-*10 slides · ~5 minutes · press → to advance*
+*11 slides · ~6 minutes · press → to advance*
 
 ---
 
@@ -10,21 +10,33 @@ Today we're going to look at the Model Context Protocol, or MCP. It's one of the
 
 ---
 
-## Slide 2 — The Problem
+## Slide 2 — Breaking Down M · C · P
 
-So what exactly is MCP, and why do we need it?
+Before we dive into the details, let's break down the name itself — because each word matters.
 
-At its core, the Model Context Protocol is an open standard that enables seamless integration between AI models — like Claude — and external data sources or tools. It's addressing a fundamental limitation that has held back AI assistants from reaching their full potential.
+**Model** — that's just the LLM. A large language model like ChatGPT, Claude, or Gemini. Billions of parameters trained on vast amounts of data. You all use these every day. They're brilliant at conversation, strategising, pulling historical facts. But here's the limitation — on its own, a model can *write* an email for you, but then you need to copy it into Gmail and hit send yourself. It can't actually *do* anything in the real world.
 
-Before MCP, connecting a model to each new data source required custom implementations. Imagine an AI agent that needs to use a calculator, then a web browser, then a spreadsheet. Each of those connections required a unique, custom-built adapter. It was like teaching the AI a new language for every single tool. And that gets expensive, fast.
+**Context** — this is the key ingredient. Think about it: the answers to most questions in life are very different depending on the context. "What should I prioritise this week?" — that answer is completely different depending on whether you're a sales engineer or a backend developer, and whether you're mid-incident or in a quiet sprint. An LLM on its own only has its training data and whatever you type into the prompt. Context means connecting the model to *your* data — your CRM, your codebase, your databases, your emails. If you ask "what are the most common job titles of new customers this quarter?" — that's impossible without context from Salesforce.
 
-MCP solves this by providing a universal, open standard for connecting AI systems with data sources — replacing fragmented integrations with a single protocol. This means we can give AI systems access to databases, file systems, APIs, and other tools in a completely standardised way.
-
-Think of it like USB-C for AI. Your laptop has one port that connects to monitors, drives, and chargers — MCP gives AI apps one standard connection for files, databases, GitHub, Slack, and everything else.
+**Protocol** — simply a set of rules. We all know protocols. The protocol when meeting the King is to bow. HTTP defines how a browser should talk to a web server. TCP/IP defines how packets travel across the internet. MCP defines how AI applications should talk to external tools. It's an agreed-upon industry standard — so that Salesforce, Google, Notion, and every other tool provider don't each have to invent their own method of connecting to AI.
 
 ---
 
-## Slide 3 — Architecture: Three Key Components
+## Slide 3 — The Problem: Why Do We Need MCP?
+
+So why does this matter? When you connect an LLM directly to the tools we use every day, two powerful things happen.
+
+First — **context**. The model can pull in real data from external tools. Connect it to Salesforce and it can run that customer analysis. Connect it to your Postgres database and it can query your actual metrics. Connect it to your codebase and it understands your architecture.
+
+Second — and this is especially important in the agentic world — **action**. We move beyond just knowledge towards actually doing things. Rather than just writing the email for you, the AI can create the draft directly in your Gmail account, or even send it. Rather than just suggesting a SQL query, it can execute it. This shift from knowledge to action is what makes AI truly useful in day-to-day workflows.
+
+The problem was: before MCP, every single one of these connections required a custom integration. Salesforce built their own method, Google built their own, Notion built their own. An AI agent needing a calculator, a web browser, and a spreadsheet required three completely different adapters — like learning a new language for every tool. That gets expensive fast.
+
+MCP solves this with one universal standard — like USB-C for AI. Your laptop has one port that connects to monitors, drives, and chargers. MCP gives AI apps one standard connection for files, databases, GitHub, Slack, and everything else.
+
+---
+
+## Slide 4 — Architecture: Three Key Components
 
 Let's break down the architecture. MCP follows a client-server model with three key components.
 
@@ -36,7 +48,7 @@ Let's break down the architecture. MCP follows a client-server model with three 
 
 ---
 
-## Slide 4 — Inside an MCP Host
+## Slide 5 — Inside an MCP Host
 
 Here's what this looks like in practice. Take Claude as the host. Inside it, you have multiple MCP clients, and each client maintains a dedicated connection to an MCP server.
 
@@ -46,38 +58,36 @@ At Cloudflare, we're seeing this pattern everywhere. Our engineering teams use C
 
 ---
 
-## Slide 5 — Five Core Primitives
+## Slide 6 — Five Core Primitives
 
-Now let's dive deeper into the five core primitives that power MCP. These are the building blocks that enable standardised communication between AI models and external systems.
+Now let's look at the five core primitives — the building blocks that make MCP work.
 
-On the **server side**, there are three primitives:
+On the **server side**, there are three:
 
-- **Prompts** — instructions or templates that can be injected into the LLM's context. They guide how the model should approach certain tasks.
-- **Resources** — structured data objects that can be included in the context window. Files, images, API responses, database records — anything the model needs to reference.
-- **Tools** — executable functions that the LLM can call to retrieve information or perform actions. Querying a database, modifying a file, calling an API.
+- **Prompts** — instructions or templates injected into the LLM's context. They guide how the model approaches certain tasks.
+- **Resources** — structured data objects included in the context window. Files, images, API responses, database records — anything the model needs to reference.
+- **Tools** — executable functions the LLM can call. This is where the *action* happens — querying a database, modifying a file, calling an API.
 
-On the **client side**, there are two equally important primitives:
+On the **client side**, two more:
 
-- **Roots** — think of it as creating a secure channel for file access. The AI can open documents, read code, and analyse data files — without giving unrestricted access to your entire file system.
-- **Sampling** — this enables a server to request the LLM's help when needed. For example, if an MCP server is analysing your database schema and needs to generate a relevant query, it can ask the LLM through sampling.
+- **Roots** — creates a secure channel for file access. The AI can open documents, read code, and analyse data — without unrestricted access to your entire filesystem.
+- **Sampling** — enables a server to request the LLM's help. If an MCP server is analysing a database schema and needs to generate a query, it asks the LLM through sampling.
 
-This creates a two-way interaction where both the AI and the external tools can initiate requests to each other, making the whole system much more flexible and powerful.
-
----
-
-## Slide 6 — Server Capabilities Deep Dive
-
-Let's zoom in on the server side. Every MCP server exposes its capabilities — Prompts, Resources, and Tools — and the LLM discovers these dynamically at connection time.
-
-Here's what a tool definition looks like in practice. It's just a JSON structure with a name, a description, and the arguments it accepts. The LLM reads this and understands exactly what it can do and what parameters it needs.
-
-This is what makes MCP so powerful compared to traditional API integrations. The AI doesn't need hardcoded knowledge of each tool — it discovers capabilities on the fly.
-
-This is called **Dynamic Discovery**. The AI client can simply ask a server "what can you do?" at runtime. If you add a new tool to your MCP server, the AI picks it up automatically — no redeployment, no config changes.
+This creates a genuine two-way interaction — both the AI and external tools can initiate requests to each other.
 
 ---
 
-## Slide 7 — Client Primitives: Roots & Sampling
+## Slide 7 — Server Capabilities Deep Dive
+
+Let's zoom in on the server side. Every MCP server exposes its capabilities — Prompts, Resources, and Tools — and here's the key: the LLM discovers these **dynamically** at connection time.
+
+Here's what a tool definition looks like. It's just a JSON structure with a name, a description, and the arguments it accepts. The LLM reads this and understands exactly what it can do and what parameters it needs.
+
+This is called **Dynamic Discovery**. The AI client simply asks a server "what can you do?" at runtime. If you add a new tool to your MCP server, the AI picks it up automatically — no redeployment, no config changes. This is what makes MCP fundamentally more powerful than traditional hardcoded API integrations.
+
+---
+
+## Slide 8 — Client Primitives: Roots & Sampling
 
 On the client side, Roots and Sampling are what make MCP secure and bidirectional.
 
@@ -87,39 +97,39 @@ Sampling is the really interesting one. It flips the direction — instead of th
 
 ---
 
-## Slide 8 — The N×M Problem (Interactive)
+## Slide 9 — The N×M Problem (Interactive)
 
 *[Press Enter to step through each stage]*
 
-Now, the real power of MCP becomes clear when we consider the N-by-M problem it solves.
+Now, the real power of MCP becomes clear when we consider the N-by-M problem.
 
 **Step 1:** Here we have LLM vendors on the left — Anthropic, DeepSeek, OpenAI — and tools on the right — Postgres, Google Drive, GitHub.
 
-**Step 2:** Previously, integrating N different LLMs with M different tools required N times M custom integrations. Every vendor had to build a separate connector for every tool. You can see the mess of connections — and this is only three by three.
+**Step 2:** Previously, integrating N different LLMs with M different tools required N times M custom integrations. Every vendor built a separate connector for every tool. You can see the mess of connections — and this is only three by three.
 
 **Step 3:** Now imagine scaling this to a hundred tools. Different authentication methods, breaking API changes, duplicated code everywhere. It simply doesn't scale.
 
-**Step 4:** With MCP, tool builders implement one protocol, and LLM vendors implement the same protocol. Instead of N times M integrations, you get N plus M. That's the magic. Build the connection once, and it works everywhere.
+**Step 4:** With MCP, tool builders implement one protocol, and LLM vendors implement the same protocol. Instead of N times M integrations, you get N plus M. Build the connection once, and it works everywhere.
 
 At Cloudflare, we have dozens of internal tools and services. The idea that each AI integration only needs to implement MCP once, rather than custom connectors for each tool, is transformative for our engineering velocity.
 
 ---
 
-## Slide 9 — Practical Example: Claude + Postgres
+## Slide 10 — Practical Example: Claude + Postgres
 
-Let's look at a practical example. Say we need Claude to analyse data from our Postgres database. We don't need to build a custom integration.
+Let's see this in action. Say we need Claude to analyse data from a Postgres database. We don't need to build a custom integration.
 
-Instead, we use an MCP server for Postgres that exposes the database through the protocol's primitives. Claude, through an MCP client, sends a request. The MCP server translates it into a safe SQL query, executes it, and the results flow back into Claude's context.
+We use an MCP server for Postgres that exposes the database through the protocol's primitives. Claude, through an MCP client, sends a request. The MCP server translates it into a safe SQL query, executes it, and the results flow back into Claude's context.
 
-All of this happens while maintaining security — read-only access by default, no direct database credentials exposed to the LLM.
+All while maintaining security — read-only access by default, no direct database credentials exposed to the LLM.
 
-At Cloudflare, we're exploring patterns like this for our analytics and observability data. Imagine asking your AI assistant "what was the p99 latency for this Worker last week?" and getting an answer pulled directly from our metrics stores.
+At Cloudflare, we're exploring patterns like this for analytics and observability data. Imagine asking your AI assistant "what was the p99 latency for this Worker last week?" and getting the answer pulled directly from our metrics stores.
 
 ---
 
-## Slide 10 — Ecosystem & Summary
+## Slide 11 — Ecosystem & Summary
 
-The ecosystem is growing rapidly. Developers have already built MCP integrations for Google Drive, Slack, GitHub, Git, Postgres, and many more. There are SDKs available in TypeScript and Python, making it accessible to developers of all backgrounds.
+The ecosystem is growing rapidly. Developers have already built MCP integrations for Google Drive, Slack, GitHub, Git, Postgres, and many more. SDKs are available in TypeScript and Python.
 
 Three things to remember:
 
@@ -127,9 +137,7 @@ Three things to remember:
 2. **Build Once** — create an MCP server and every compatible AI client can use it immediately.
 3. **Open Source** — the spec, the SDKs, and the community are all open. Anyone can contribute.
 
-MCP is positioned to become a foundational technology in the AI landscape — particularly for building sophisticated applications that interact with diverse data sources and tools. And at Cloudflare, we're actively building on it.
-
-One important thing to note — MCP doesn't replace APIs. It's an AI-friendly layer on top. Under the hood, MCP servers are often just wrappers around existing REST APIs. So your existing infrastructure stays exactly the same.
+One important thing to note — MCP doesn't replace APIs. It's an AI-friendly layer on top. Under the hood, MCP servers are often just wrappers around existing REST APIs. Your existing infrastructure stays exactly the same.
 
 If you want to learn more, check out modelcontextprotocol.io, the GitHub repo, or the full specification.
 
@@ -137,4 +145,4 @@ Thanks everyone.
 
 ---
 
-*Total time: approximately 5 minutes at conversational pace.*
+*Total time: approximately 6 minutes at conversational pace.*

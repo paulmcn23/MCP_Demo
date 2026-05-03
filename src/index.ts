@@ -149,8 +149,35 @@ const html = `<!DOCTYPE html>
   <p style="text-align:center;margin-top:2rem;font-size:0.85rem;opacity:0.35;">Press <kbd style="background:#35353d;padding:2px 8px;border-radius:4px;">→</kbd> to begin</p>
 </div>
 
-<!-- ═══════ SLIDE 2 — The Problem ═══════ -->
+<!-- ═══════ SLIDE 2 — Breaking Down the Name ═══════ -->
 <div class="slide" data-slide="1">
+  <span class="tag">Definitions</span>
+  <h2>Breaking Down <span class="teal">M · C · P</span></h2>
+  <p style="text-align:center;opacity:0.6;margin-bottom:1.2rem;">Before we dive in — let's unpack what each word actually means.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem;max-width:800px;width:100%;">
+    <div class="card" style="text-align:center;">
+      <div class="card-icon">🧠</div>
+      <h3 style="color:#34d399;">Model</h3>
+      <p style="font-size:0.78rem;">The LLM — a large language model like GPT, Claude, or Gemini. Billions of parameters, trained on vast data. Great at conversation, strategy, and pulling historical facts.</p>
+      <p style="font-size:0.72rem;opacity:0.4;margin-top:0.5rem;">On its own it can <em>write</em> an email — but can't <em>send</em> it.</p>
+    </div>
+    <div class="card" style="text-align:center;border-color:#a78bfa44;">
+      <div class="card-icon">🔍</div>
+      <h3 style="color:#a78bfa;">Context</h3>
+      <p style="font-size:0.78rem;">The missing ingredient. An LLM only knows its training data and your prompt. <strong>Context</strong> means connecting it to <em>your</em> data — your CRM, codebase, emails, databases.</p>
+      <p style="font-size:0.72rem;opacity:0.4;margin-top:0.5rem;">"What are the top job titles of new customers?" — impossible without <strong>context</strong> from Salesforce.</p>
+    </div>
+    <div class="card" style="text-align:center;border-color:#6b9fff44;">
+      <div class="card-icon">📜</div>
+      <h3 style="color:#6b9fff;">Protocol</h3>
+      <p style="font-size:0.78rem;">A set of rules. HTTP defines how browsers talk to servers. TCP/IP defines how packets travel the internet. <strong>MCP</strong> defines how AI apps talk to tools.</p>
+      <p style="font-size:0.72rem;opacity:0.4;margin-top:0.5rem;">An agreed-upon industry standard — so every tool doesn't need its own custom connector.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SLIDE 3 — The Problem ═══════ -->
+<div class="slide" data-slide="2">
   <span class="tag">The Problem</span>
   <h2>Why Do We Need <span class="teal">MCP</span>?</h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1.2rem;">Before MCP, connecting AI models to each new data source required custom implementations — which gets expensive fast.</p>
@@ -187,10 +214,18 @@ const html = `<!DOCTYPE html>
     </div>
   </div>
   <p style="text-align:center;font-size:0.72rem;opacity:0.3;margin-top:0.4rem;">Think of MCP as the <strong>USB-C port</strong> for AI — one standard connection for everything</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;max-width:600px;width:100%;margin-top:1rem;">
+    <div style="background:#27272d;border:1px solid #a78bfa33;border-radius:12px;padding:0.8rem 1rem;text-align:center;">
+      <p style="font-size:0.75rem;">🔍 <strong style="color:#a78bfa;">Context</strong><br><span style="opacity:0.5;font-size:0.72rem;">Pull data from Salesforce, Postgres, Drive to inform answers</span></p>
+    </div>
+    <div style="background:#27272d;border:1px solid #fbbf2433;border-radius:12px;padding:0.8rem 1rem;text-align:center;">
+      <p style="font-size:0.75rem;">⚡ <strong style="color:#fbbf24;">Action</strong><br><span style="opacity:0.5;font-size:0.72rem;">Don't just write the email — actually <em>send</em> it. Knowledge → Action.</span></p>
+    </div>
+  </div>
 </div>
 
-<!-- ═══════ SLIDE 3 — Architecture Overview ═══════ -->
-<div class="slide" data-slide="2">
+<!-- ═══════ SLIDE 4 — Architecture Overview ═══════ -->
+<div class="slide" data-slide="3">
   <span class="tag">Architecture</span>
   <h2>Three Key <span class="teal">Components</span></h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1.2rem;">MCP follows a client-server model with Hosts, Clients, and Servers.</p>
@@ -213,8 +248,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 4 — Host + Clients + Servers ═══════ -->
-<div class="slide" data-slide="3">
+<!-- ═══════ SLIDE 5 — Host + Clients + Servers ═══════ -->
+<div class="slide" data-slide="4">
   <span class="tag">How It Connects</span>
   <h2>Inside an <span class="teal">MCP Host</span></h2>
   <div class="host-box">
@@ -245,8 +280,8 @@ const html = `<!DOCTYPE html>
   <p style="text-align:center;font-size:0.78rem;opacity:0.4;margin-top:0.8rem;">Each client maintains a 1:1 connection · The host orchestrates all clients</p>
 </div>
 
-<!-- ═══════ SLIDE 5 — Five Primitives ═══════ -->
-<div class="slide" data-slide="4">
+<!-- ═══════ SLIDE 6 — Five Primitives ═══════ -->
+<div class="slide" data-slide="5">
   <span class="tag">Core Primitives</span>
   <h2>Five Building Blocks of <span class="teal">MCP</span></h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">The standardised building blocks that enable communication between AI and external systems.</p>
@@ -286,8 +321,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 6 — Server Deep Dive ═══════ -->
-<div class="slide" data-slide="5">
+<!-- ═══════ SLIDE 7 — Server Deep Dive ═══════ -->
+<div class="slide" data-slide="6">
   <span class="tag">Server Capabilities</span>
   <h2>What MCP Servers <span class="teal">Expose</span></h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">Servers expose capabilities that the LLM discovers dynamically at connection time.</p>
@@ -321,8 +356,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 7 — Client Primitives ═══════ -->
-<div class="slide" data-slide="6">
+<!-- ═══════ SLIDE 8 — Client Primitives ═══════ -->
+<div class="slide" data-slide="7">
   <span class="tag">Client Side</span>
   <h2>Client Primitives: <span class="teal">Roots</span> & <span class="purple">Sampling</span></h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1.2rem;">On the client side, two primitives are equally important.</p>
@@ -351,8 +386,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 8 — N×M Interactive ═══════ -->
-<div class="slide" data-slide="7">
+<!-- ═══════ SLIDE 9 — N×M Interactive ═══════ -->
+<div class="slide" data-slide="8">
   <span class="tag" id="itag">The N×M Problem</span>
   <h2 id="ititle">Press <span class="teal">Enter</span> to Step Through</h2>
   <div class="interactive-canvas" id="icanvas">
@@ -369,8 +404,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 9 — Practical Example ═══════ -->
-<div class="slide" data-slide="8">
+<!-- ═══════ SLIDE 10 — Practical Example ═══════ -->
+<div class="slide" data-slide="9">
   <span class="tag">In Practice</span>
   <h2>Claude + <span class="teal">Postgres</span> via MCP</h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">No custom integration needed — just an MCP server for Postgres.</p>
@@ -405,8 +440,8 @@ const html = `<!DOCTYPE html>
   <p style="text-align:center;font-size:0.78rem;opacity:0.45;margin-top:0.8rem;">All while maintaining security and context · Read-only access by default</p>
 </div>
 
-<!-- ═══════ SLIDE 10 — Ecosystem & Summary ═══════ -->
-<div class="slide" data-slide="9">
+<!-- ═══════ SLIDE 11 — Ecosystem & Summary ═══════ -->
+<div class="slide" data-slide="10">
   <span class="tag">Growing Ecosystem</span>
   <h2>MCP is <span class="teal">Everywhere</span></h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">Developers have already built integrations for the tools teams use every day.</p>
@@ -451,7 +486,7 @@ const html = `<!DOCTYPE html>
 <nav class="nav">
   <button id="prev" onclick="go(-1)" disabled>◀</button>
   <div class="dots" id="dots"></div>
-  <span class="counter" id="counter">1 / 10</span>
+  <span class="counter" id="counter">1 / 11</span>
   <button id="next" onclick="go(1)">▶</button>
 </nav>
 
@@ -463,7 +498,7 @@ const html = `<!DOCTYPE html>
   const dots = document.getElementById('dots');
   const counter = document.getElementById('counter');
   const progress = document.getElementById('progress');
-  const INTERACTIVE_SLIDE = 7;
+  const INTERACTIVE_SLIDE = 8;
 
   for (let i = 0; i < total; i++) {
     const d = document.createElement('div');
