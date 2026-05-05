@@ -1,6 +1,6 @@
 # MCP Explained — Presenter Script
 
-*17 slides · ~20–25 minutes · press → to advance*
+*18 slides · ~20–25 minutes · press → to advance*
 
 ---
 
@@ -199,7 +199,25 @@ So you can ask the AI things like "What's the air quality in Riverside Ward?" or
 
 ---
 
-## Slide 16 — Defining Tools in Your MCP Server
+## Slide 16 — How It Actually Works (Architecture Deep Dive)
+
+Now let me show you what's actually happening under the hood. This is the full data flow from physical sensors to a natural language answer.
+
+At the top you have the sensors. 23 IoT sensors across 5 wards — measuring temperature, flood levels, bin fill, air quality, parking, noise. In the real deployment, these publish data via MQTT or HTTP.
+
+That data hits the **Cloudflare edge**. A Worker acts as the ingress point — it receives the sensor readings and writes them into **D1**, which is SQLite running at the edge. No external database, no connection strings, no round-trips to a centralised data centre. The data lives where it's processed.
+
+The **MCP server** — also a Worker, built with the McpAgent class — sits right next to D1. When an AI assistant calls one of its tools, it queries D1 directly. Sub-millisecond data access. Alongside that, you have a dashboard on Pages for visual monitoring and an alert pipeline using Queues and Workflows for threshold breaches.
+
+The MCP server speaks to any AI host over **SSE** — Server-Sent Events. Claude Desktop, Windsurf, Cursor, any MCP-compatible application can connect. A council facilities manager opens their AI assistant and asks "Which bins need collecting?" — the LLM calls the right MCP tool, it queries D1, and they get an answer in plain English.
+
+Three things to notice here. First: **no origin server**. There is no VM, no container, no central data centre in this architecture. Everything runs at the Cloudflare edge. Second: this demo touches **over 15 Cloudflare products** — Workers, D1, Durable Objects, Queues, Pages, Cron Triggers, Tunnel, Access — all in one coherent platform. Third: because we built it as an MCP server, **any LLM host can query this data**. We built the server once and it works everywhere. That's the protocol at work.
+
+Let me show you this live...
+
+---
+
+## Slide 17 — Defining Tools in Your MCP Server
 
 Here's what the actual code looks like. You extend `McpAgent` with your environment type — in our case that includes the D1 binding. You create a new `McpServer` instance, and in the `init()` method, you register your tools.
 
@@ -211,7 +229,7 @@ The pattern is the same for every tool: `this.server.tool()` to register it, Zod
 
 ---
 
-## Slide 17 — Deploy & Connect
+## Slide 18 — Deploy & Connect
 
 Deploying is one command: `npx wrangler deploy`. Your MCP server is immediately live on Workers globally. The D1 database is bound, Durable Objects back each session for state management. It's running in 300+ cities worldwide with zero cold starts.
 

@@ -738,8 +738,128 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 16 — The Code ═══════ -->
+<!-- ═══════ SLIDE 16 — Architecture Deep Dive ═══════ -->
 <div class="slide" data-slide="15">
+  <span class="tag">Under the Hood</span>
+  <h2>How It <span class="teal">Actually Works</span></h2>
+  <p style="text-align:center;opacity:0.6;margin-bottom:0.8rem;">The full data flow — from physical sensors to natural language answers.</p>
+
+  <!-- Architecture diagram -->
+  <div style="display:flex;flex-direction:column;gap:0.4rem;max-width:850px;width:100%;align-items:center;">
+
+    <!-- Row 1: Sensors -->
+    <div style="display:flex;gap:0.6rem;align-items:center;justify-content:center;flex-wrap:wrap;">
+      <div style="background:#1e293b;border:2px dashed #3b82f644;border-radius:12px;padding:0.5rem 0.7rem;text-align:center;">
+        <div style="font-size:1.2rem;">🌡️</div>
+        <div style="font-size:0.6rem;opacity:0.5;">Temperature</div>
+      </div>
+      <div style="background:#1e293b;border:2px dashed #3b82f644;border-radius:12px;padding:0.5rem 0.7rem;text-align:center;">
+        <div style="font-size:1.2rem;">🌊</div>
+        <div style="font-size:0.6rem;opacity:0.5;">Flood Level</div>
+      </div>
+      <div style="background:#1e293b;border:2px dashed #3b82f644;border-radius:12px;padding:0.5rem 0.7rem;text-align:center;">
+        <div style="font-size:1.2rem;">🗑️</div>
+        <div style="font-size:0.6rem;opacity:0.5;">Bin Fill</div>
+      </div>
+      <div style="background:#1e293b;border:2px dashed #3b82f644;border-radius:12px;padding:0.5rem 0.7rem;text-align:center;">
+        <div style="font-size:1.2rem;">💨</div>
+        <div style="font-size:0.6rem;opacity:0.5;">Air Quality</div>
+      </div>
+      <div style="background:#1e293b;border:2px dashed #3b82f644;border-radius:12px;padding:0.5rem 0.7rem;text-align:center;">
+        <div style="font-size:1.2rem;">🅿️</div>
+        <div style="font-size:0.6rem;opacity:0.5;">Parking</div>
+      </div>
+      <div style="background:#1e293b;border:2px dashed #3b82f644;border-radius:12px;padding:0.5rem 0.7rem;text-align:center;">
+        <div style="font-size:1.2rem;">🔊</div>
+        <div style="font-size:0.6rem;opacity:0.5;">Noise</div>
+      </div>
+    </div>
+    <div style="font-size:0.65rem;opacity:0.3;">23 IoT sensors across 5 wards</div>
+    <div style="font-size:1rem;opacity:0.3;">▼</div>
+    <div style="font-size:0.6rem;opacity:0.4;background:#334155;padding:0.15rem 0.5rem;border-radius:4px;">MQTT / HTTP</div>
+    <div style="font-size:1rem;opacity:0.3;">▼</div>
+
+    <!-- Row 2: Cloudflare Edge -->
+    <div style="background:#0f172a;border:2px solid #f6821f55;border-radius:16px;padding:1rem 1.5rem;width:100%;max-width:780px;position:relative;">
+      <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#f6821f;color:#111;font-size:0.65rem;font-weight:700;padding:0.15rem 0.7rem;border-radius:6px;">CLOUDFLARE EDGE</div>
+      <div style="display:flex;align-items:center;justify-content:center;gap:0.8rem;flex-wrap:wrap;">
+
+        <div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:0.6rem 0.8rem;text-align:center;min-width:100px;">
+          <div style="font-size:1.1rem;">⚡</div>
+          <div style="font-size:0.72rem;font-weight:600;">Worker</div>
+          <div style="font-size:0.58rem;opacity:0.4;">Ingress</div>
+        </div>
+
+        <div style="font-size:0.7rem;opacity:0.3;">→</div>
+
+        <div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:0.6rem 0.8rem;text-align:center;min-width:100px;">
+          <div style="font-size:1.1rem;">🗄️</div>
+          <div style="font-size:0.72rem;font-weight:600;">D1</div>
+          <div style="font-size:0.58rem;opacity:0.4;">SQLite at Edge</div>
+        </div>
+
+        <div style="font-size:0.7rem;opacity:0.3;">→</div>
+
+        <div style="background:#27272d;border:2px solid #fbbf2466;border-radius:10px;padding:0.6rem 0.8rem;text-align:center;min-width:120px;">
+          <div style="font-size:1.1rem;">🖥️</div>
+          <div style="font-size:0.72rem;font-weight:700;color:#fbbf24;">MCP Server</div>
+          <div style="font-size:0.58rem;opacity:0.4;">McpAgent + SSE</div>
+        </div>
+
+        <div style="font-size:0.7rem;opacity:0.3;">→</div>
+
+        <div style="display:flex;flex-direction:column;gap:0.3rem;">
+          <div style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:0.35rem 0.6rem;text-align:center;">
+            <div style="font-size:0.65rem;font-weight:600;">📊 Dashboard</div>
+            <div style="font-size:0.52rem;opacity:0.4;">Pages</div>
+          </div>
+          <div style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:0.35rem 0.6rem;text-align:center;">
+            <div style="font-size:0.65rem;font-weight:600;">🚨 Alerts</div>
+            <div style="font-size:0.52rem;opacity:0.4;">Queues + Workflows</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div style="font-size:1rem;opacity:0.3;">▼</div>
+    <div style="font-size:0.6rem;opacity:0.4;background:#2dd4bf22;color:#2dd4bf;padding:0.15rem 0.5rem;border-radius:4px;font-weight:600;">MCP Protocol (SSE)</div>
+    <div style="font-size:1rem;opacity:0.3;">▼</div>
+
+    <!-- Row 3: AI Consumers -->
+    <div style="display:flex;gap:1rem;align-items:center;justify-content:center;flex-wrap:wrap;">
+      <div style="background:#27272d;border:2px solid #2dd4bf44;border-radius:12px;padding:0.6rem 1rem;text-align:center;">
+        <div style="font-size:1.3rem;">🧠</div>
+        <div style="font-size:0.72rem;font-weight:600;">Claude Desktop</div>
+      </div>
+      <div style="background:#27272d;border:2px solid #2dd4bf44;border-radius:12px;padding:0.6rem 1rem;text-align:center;">
+        <div style="font-size:1.3rem;">⌨️</div>
+        <div style="font-size:0.72rem;font-weight:600;">Windsurf</div>
+      </div>
+      <div style="background:#27272d;border:2px solid #2dd4bf44;border-radius:12px;padding:0.6rem 1rem;text-align:center;">
+        <div style="font-size:1.3rem;">💬</div>
+        <div style="font-size:0.72rem;font-weight:600;">Any MCP Host</div>
+      </div>
+    </div>
+    <div style="font-size:0.65rem;opacity:0.3;">Council staff ask natural language questions</div>
+
+  </div>
+
+  <div style="display:flex;gap:0.6rem;max-width:700px;width:100%;margin-top:0.6rem;justify-content:center;flex-wrap:wrap;">
+    <div style="background:#3b82f611;border:1px solid #3b82f633;border-radius:8px;padding:0.3rem 0.6rem;font-size:0.62rem;text-align:center;">
+      <strong style="color:#60a5fa;">No origin server</strong> — everything at the edge
+    </div>
+    <div style="background:#f6821f11;border:1px solid #f6821f33;border-radius:8px;padding:0.3rem 0.6rem;font-size:0.62rem;text-align:center;">
+      <strong style="color:#f6821f;">15+ CF products</strong> — one coherent platform
+    </div>
+    <div style="background:#2dd4bf11;border:1px solid #2dd4bf33;border-radius:8px;padding:0.3rem 0.6rem;font-size:0.62rem;text-align:center;">
+      <strong style="color:#2dd4bf;">MCP = AI-native API</strong> — build once, any LLM host
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SLIDE 17 — The Code ═══════ -->
+<div class="slide" data-slide="16">
   <span class="tag">Show Me the Code</span>
   <h2>Defining <span class="teal">Tools</span> in Your MCP Server</h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:0.8rem;">Extend McpAgent, bind D1, register tools with Zod schemas. The LLM discovers them automatically.</p>
@@ -779,8 +899,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 17 — Deploy & Connect ═══════ -->
-<div class="slide" data-slide="16">
+<!-- ═══════ SLIDE 18 — Deploy & Connect ═══════ -->
+<div class="slide" data-slide="17">
   <span class="tag">Ship It</span>
   <h2>Deploy & <span class="teal">Connect</span></h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">One command to deploy. Any MCP host can connect instantly.</p>
@@ -838,7 +958,7 @@ const html = `<!DOCTYPE html>
 <nav class="nav">
   <button id="prev" onclick="go(-1)" disabled>◀</button>
   <div class="dots" id="dots"></div>
-  <span class="counter" id="counter">1 / 17</span>
+  <span class="counter" id="counter">1 / 18</span>
   <button id="next" onclick="go(1)">▶</button>
 </nav>
 
