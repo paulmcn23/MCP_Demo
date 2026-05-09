@@ -186,7 +186,7 @@ const html = `<!DOCTYPE html>
   <h1>The <span class="teal">Model Context Protocol</span></h1>
   <p class="sub">One of the most significant advancements in LLM integration</p>
   <div style="margin-top:2rem;display:flex;flex-direction:column;gap:0.7rem;align-items:flex-start;max-width:400px;">
-    <p style="font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;opacity:0.5;align-self:center;margin-bottom:0.2rem;">Video Overview</p>
+    <p style="font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;opacity:0.5;align-self:center;margin-bottom:0.2rem;">Agenda</p>
     <div style="display:flex;align-items:center;gap:0.8rem;"><div style="width:22px;height:22px;border:2px solid #a78bfa;border-radius:50%;flex-shrink:0;"></div><span style="font-size:0.95rem;">Define MCP</span></div>
     <div style="display:flex;align-items:center;gap:0.8rem;"><div style="width:22px;height:22px;border:2px solid #a78bfa;border-radius:50%;flex-shrink:0;"></div><span style="font-size:0.95rem;">Fundamentals of MCP</span></div>
     <div style="display:flex;align-items:center;gap:0.8rem;"><div style="width:22px;height:22px;border:2px solid #a78bfa;border-radius:50%;flex-shrink:0;"></div><span style="font-size:0.95rem;">Build an MCP Server</span></div>
@@ -194,30 +194,47 @@ const html = `<!DOCTYPE html>
   <p style="text-align:center;margin-top:1.5rem;font-size:0.85rem;opacity:0.35;">Press <kbd style="background:#35353d;padding:2px 8px;border-radius:4px;">→</kbd> to begin</p>
 </div>
 
-<!-- ═══════ SLIDE 2 — Breaking Down the Name ═══════ -->
+<!-- ═══════ SLIDE 2 — Breaking Down the Name (Interactive) ═══════ -->
 <div class="slide" data-slide="1">
-  <span class="tag">Definitions</span>
-  <h2>Breaking Down <span class="teal">M · C · P</span></h2>
-  <p style="text-align:center;opacity:0.6;margin-bottom:1.2rem;">Before we dive in — let's unpack what each word actually means.</p>
+  <span class="tag" id="mcp-tag">Definitions</span>
+  <h2 id="mcp-title">Breaking Down <span class="teal">M · C · P</span></h2>
+  <p style="text-align:center;opacity:0.6;margin-bottom:0.8rem;" id="mcp-sub">Press <kbd style="background:#35353d;padding:2px 8px;border-radius:4px;font-size:0.75rem;">Enter</kbd> to step through</p>
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.2rem;max-width:800px;width:100%;">
-    <div class="card" style="text-align:center;">
-      <div class="card-icon">🧠</div>
-      <h3 style="color:#34d399;">Model</h3>
-      <p style="font-size:0.78rem;">The LLM — a large language model like GPT, Claude, or Gemini. Billions of parameters, trained on vast data. Great at conversation, strategy, and pulling historical facts.</p>
-      <p style="font-size:0.72rem;opacity:0.4;margin-top:0.5rem;">On its own it can <em>write</em> an email — but can't <em>send</em> it.</p>
+    <!-- MODEL card -->
+    <div class="card" id="mcp-model" style="text-align:center;opacity:0;transform:translateY(15px);transition:all 0.5s cubic-bezier(.4,0,.2,1);">
+      <div class="card-icon" id="mcp-model-icon">🧠</div>
+      <h3 style="color:#34d399;" id="mcp-model-title">Model</h3>
+      <!-- Photo joke overlay -->
+      <div id="mcp-joke" style="display:none;flex-direction:column;align-items:center;gap:0.3rem;margin:0.4rem 0;">
+        <img src="data:image/jpeg;base64,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" id="mcp-joke-img" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #34d399;"/>
+        <div style="font-size:2.8rem;line-height:1;margin-top:-10px;">🦸</div>
+        <p style="font-size:0.72rem;opacity:0.7;font-style:italic;">"The real model"</p>
+      </div>
+      <!-- Actual description (hidden initially) -->
+      <div id="mcp-model-desc" style="display:none;">
+        <p style="font-size:0.78rem;">The LLM — a large language model like GPT, Claude, or Gemini. Billions of parameters, trained on vast data. Great at conversation, strategy, and pulling historical facts.</p>
+        <p style="font-size:0.72rem;opacity:0.4;margin-top:0.5rem;">On its own it can <em>write</em> an email — but can't <em>send</em> it.</p>
+      </div>
     </div>
-    <div class="card" style="text-align:center;border-color:#a78bfa44;">
+    <!-- CONTEXT card (middle) -->
+    <div class="card" id="mcp-context" style="text-align:center;border-color:#a78bfa44;opacity:0;transform:translateY(15px);transition:all 0.5s cubic-bezier(.4,0,.2,1);">
       <div class="card-icon">🔍</div>
       <h3 style="color:#a78bfa;">Context</h3>
-      <p style="font-size:0.78rem;">The missing ingredient. An LLM only knows its training data and your prompt. <strong>Context</strong> means connecting it to <em>your</em> data — your CRM, codebase, emails, databases.</p>
-      <p style="font-size:0.72rem;opacity:0.4;margin-top:0.5rem;">"What are the top job titles of new customers?" — impossible without <strong>context</strong> from Salesforce.</p>
+      <p style="font-size:0.78rem;">Context changes everything. Tell a doctor "I have a headache" and you get paracetamol. Add "I fell off a ladder an hour ago" and you get a CT scan. <strong>Same question, completely different answer.</strong></p>
+      <p style="font-size:0.72rem;opacity:0.4;margin-top:0.5rem;">An LLM without context is that doctor without a patient history — connect it to <em>your</em> data and the answers transform.</p>
     </div>
-    <div class="card" style="text-align:center;border-color:#6b9fff44;">
+    <!-- PROTOCOL card (right) -->
+    <div class="card" id="mcp-protocol" style="text-align:center;border-color:#6b9fff44;opacity:0;transform:translateY(15px);transition:all 0.5s cubic-bezier(.4,0,.2,1);">
       <div class="card-icon">📜</div>
       <h3 style="color:#6b9fff;">Protocol</h3>
       <p style="font-size:0.78rem;">A set of rules. HTTP defines how browsers talk to servers. TCP/IP defines how packets travel the internet. <strong>MCP</strong> defines how AI apps talk to tools.</p>
       <p style="font-size:0.72rem;opacity:0.4;margin-top:0.5rem;">An agreed-upon industry standard — so every tool doesn't need its own custom connector.</p>
     </div>
+  </div>
+  <div class="istep-bar" style="margin-top:0.6rem;">
+    <div class="istep-dot" id="md0"></div><div class="istep-dot" id="md1"></div><div class="istep-dot" id="md2"></div><div class="istep-dot" id="md3"></div><div class="istep-dot" id="md4"></div>
+    <div class="istep-caption" id="mcpcap">Press Enter to start</div>
+    <div class="istep-hint">Enter / Space</div>
   </div>
 </div>
 
@@ -233,7 +250,7 @@ const html = `<!DOCTYPE html>
     <p style="font-size:0.85rem;font-weight:600;opacity:0.5;">LLM</p>
   </div>
   <div class="check-row"><span class="ico">✅</span><span>Great at conversation, answering questions, and predicting text.</span></div>
-  <div class="check-row"><span class="ico">❌</span><span>Incapable of doing anything <strong style="color:#f87171;">meaningful</strong><br><span style="opacity:0.5;font-size:0.82rem;">Ask it to send an email — it simply can't. Knowledge only, no action.</span></span></div>
+  <div class="check-row"><span class="ico">❌</span><span>Incapable of <strong style="color:#f87171;">taking action</strong><br><span style="opacity:0.5;font-size:0.82rem;">Ask it to send an email — it simply can't. Knowledge only, no action.</span></span></div>
 </div>
 
 <!-- ═══════ SLIDE 4 — With Tools (Interactive) ═══════ -->
@@ -255,15 +272,15 @@ const html = `<!DOCTYPE html>
     <div class="tarrow" id="t-arr2" style="left:32%;top:44%;">⟷</div>
     <div class="tarrow" id="t-arr3" style="left:32%;top:62%;">⟷</div>
     <div class="tnode" id="t-tool1" style="left:52%;top:15%;">
-      <span class="te">🔧</span><span>Tool</span><span class="te" style="margin-left:0.3rem;">☁️</span>
+      <span class="te">🔧</span><span>Tool</span><span style="margin-left:0.3rem;display:inline-flex;"><svg width="20" height="14" viewBox="0 0 48 34" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 2.5a9.5 9.5 0 0 1 8.2 4.7 7.8 7.8 0 0 1 11 7.1 7.8 7.8 0 0 1-4 6.8 8.5 8.5 0 0 1-7.7 8.4H15a10 10 0 0 1-9.8-8 8.2 8.2 0 0 1 1.3-15A9.5 9.5 0 0 1 20 2.5z" fill="#00A1E0"/></svg></span>
     </div>
     <div style="position:absolute;left:72%;top:18%;font-size:0.65rem;opacity:0.4;" class="tlabel" id="t-lbl1">Salesforce</div>
     <div class="tnode" id="t-tool2" style="left:52%;top:42%;">
-      <span class="te">🔧</span><span>Tool</span><span class="te" style="margin-left:0.3rem;">📧</span>
+      <span class="te">🔧</span><span>Tool</span><span style="margin-left:0.3rem;display:inline-flex;"><svg width="20" height="16" viewBox="0 0 48 36" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="46" height="34" rx="4" fill="#fff" stroke="#E0E0E0" stroke-width="1"/><path d="M5 5l19 14L43 5" stroke="#EA4335" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M5 5v26h8V14l11 8 11-8v17h8V5" fill="none" stroke="#EA4335" stroke-width="0"/><rect x="1" y="1" width="10" height="34" rx="2" fill="#4285F4"/><rect x="37" y="1" width="10" height="34" rx="2" fill="#4285F4"/><path d="M1 7l23 16L47 7" stroke="#EA4335" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     </div>
     <div style="position:absolute;left:72%;top:46%;font-size:0.65rem;opacity:0.4;" class="tlabel" id="t-lbl2">Gmail</div>
     <div class="tnode" id="t-tool3" style="left:52%;top:68%;">
-      <span class="te">🔧</span><span>Tool</span><span class="te" style="margin-left:0.3rem;">📝</span>
+      <span class="te">🔧</span><span>Tool</span><span style="margin-left:0.3rem;display:inline-flex;"><svg width="18" height="18" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 4h14l6 6v18H6V4z" fill="#36B37E" rx="2"/><path d="M20 4v6h6" fill="#2D9F6B"/><rect x="10" y="14" width="12" height="2" rx="1" fill="#fff"/><rect x="10" y="18" width="9" height="2" rx="1" fill="#fff"/><rect x="10" y="22" width="11" height="2" rx="1" fill="#fff"/></svg></span>
     </div>
     <div style="position:absolute;left:72%;top:72%;font-size:0.65rem;opacity:0.4;" class="tlabel" id="t-lbl3">Wiki</div>
   </div>
@@ -279,58 +296,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 5 — Fragmented Chain (Interactive) ═══════ -->
+<!-- ═══════ SLIDE 5 — N×M Interactive ═══════ -->
 <div class="slide" data-slide="4">
-  <span class="tag" id="ftag">The Problem</span>
-  <h2 id="ftitle">Without MCP: <span class="red">Fragmented</span> AI Development</h2>
-  <p style="text-align:center;opacity:0.6;margin-bottom:0.8rem;" id="fsub">Press <kbd style="background:#35353d;padding:2px 8px;border-radius:4px;font-size:0.75rem;">Enter</kbd> to step through</p>
-  <div class="frag-wrap" id="frag-wrap">
-    <!-- Row 0 (AI App 1 — appears in step 3) -->
-    <div class="frag-row" id="frow0">
-      <div class="frag-box app">AI App 1</div>
-      <span class="frag-arrow">→</span>
-      <div class="frag-box impl">Custom implementation</div>
-      <span class="frag-arrow">→</span>
-      <div class="frag-box prompt">Custom prompt logic</div>
-      <span class="frag-arrow">→</span>
-      <div class="frag-box tool">Custom tool calls</div>
-      <span class="frag-arrow">→</span>
-      <div class="frag-box data">Custom data access</div>
-    </div>
-    <!-- Row 1 (AI App 2 — shown first) -->
-    <div class="frag-row" id="frow1">
-      <div class="frag-box app" id="f1-app">AI App 2</div>
-      <span class="frag-arrow" id="f1-a1">→</span>
-      <div class="frag-box impl" id="f1-impl">Custom implementation</div>
-      <span class="frag-arrow" id="f1-a2">→</span>
-      <div class="frag-box prompt" id="f1-prompt">Custom prompt logic</div>
-      <span class="frag-arrow" id="f1-a3">→</span>
-      <div class="frag-box tool" id="f1-tool">Custom tool calls</div>
-      <span class="frag-arrow" id="f1-a4">→</span>
-      <div class="frag-box data" id="f1-data">Custom data access</div>
-    </div>
-    <!-- Row 2 (AI App 3 — appears in step 3) -->
-    <div class="frag-row" id="frow2">
-      <div class="frag-box app">AI App 3</div>
-      <span class="frag-arrow">→</span>
-      <div class="frag-box impl">Custom implementation</div>
-      <span class="frag-arrow">→</span>
-      <div class="frag-box prompt">Custom prompt logic</div>
-      <span class="frag-arrow">→</span>
-      <div class="frag-box tool">Custom tool calls</div>
-      <span class="frag-arrow">→</span>
-      <div class="frag-box data">Custom data access</div>
-    </div>
-  </div>
-  <div class="frag-step-bar">
-    <div class="frag-step-dot" id="fd0"></div><div class="frag-step-dot" id="fd1"></div><div class="frag-step-dot" id="fd2"></div>
-    <div class="istep-caption" id="fcap">Press Enter to start</div>
-    <div class="istep-hint">Enter / Space</div>
-  </div>
-</div>
-
-<!-- ═══════ SLIDE 6 — N×M Interactive ═══════ -->
-<div class="slide" data-slide="5">
   <span class="tag" id="itag">The N×M Problem</span>
   <h2 id="ititle">Press <span class="teal">Enter</span> to Step Through</h2>
   <div class="interactive-canvas" id="icanvas">
@@ -347,8 +314,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 7 — The Evolution of LLMs ═══════ -->
-<div class="slide" data-slide="6">
+<!-- ═══════ SLIDE 6 — The Evolution of LLMs ═══════ -->
+<div class="slide" data-slide="5">
   <span class="tag">The Journey</span>
   <h2>LLMs by themselves are incapable of doing anything <span class="red">meaningful</span></h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">Three stages in the evolution of LLM capabilities.</p>
@@ -392,8 +359,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 8 — What is MCP (Ecosystem Diagram) ═══════ -->
-<div class="slide" data-slide="7">
+<!-- ═══════ SLIDE 7 — What is MCP (Ecosystem Diagram) ═══════ -->
+<div class="slide" data-slide="6">
   <span class="tag">Under the Hood</span>
   <h2>What is the <span class="teal">Model Context Protocol</span>?</h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:0.6rem;">The MCP ecosystem: Hosts → Clients → Protocol → Servers → Primitives</p>
@@ -484,8 +451,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 9 — Five Primitives ═══════ -->
-<div class="slide" data-slide="8">
+<!-- ═══════ SLIDE 8 — Five Primitives ═══════ -->
+<div class="slide" data-slide="7">
   <span class="tag">Core Primitives</span>
   <h2>Five Building Blocks of <span class="teal">MCP</span></h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">The standardised building blocks that enable communication between AI and external systems.</p>
@@ -525,8 +492,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 10 — Client Side: Roots & Sampling ═══════ -->
-<div class="slide" data-slide="9">
+<!-- ═══════ SLIDE 9 — Client Side: Roots & Sampling ═══════ -->
+<div class="slide" data-slide="8">
   <span class="tag">Client Side</span>
   <h2>Client Primitives: <span class="teal">Roots</span> & <span class="purple">Sampling</span></h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1.2rem;">On the client side, two primitives complete the picture.</p>
@@ -555,8 +522,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 11 — Server Side: Tools, Resources, Prompts ═══════ -->
-<div class="slide" data-slide="10">
+<!-- ═══════ SLIDE 10 — Server Side: Tools, Resources, Prompts ═══════ -->
+<div class="slide" data-slide="9">
   <span class="tag">Server Capabilities</span>
   <h2>What MCP Servers <span class="teal">Expose</span></h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">Three major things inside every MCP server — <strong>TRP</strong>: Tools, Resources, Prompt Templates.</p>
@@ -590,8 +557,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 12 — Practical Example: OpenCode + Google Workspace ═══════ -->
-<div class="slide" data-slide="11">
+<!-- ═══════ SLIDE 11 — Practical Example: OpenCode + Google Workspace ═══════ -->
+<div class="slide" data-slide="10">
   <span class="tag">In Practice</span>
   <h2>OpenCode + <span class="teal">Google Workspace</span> via MCP</h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">No custom integration needed — just an MCP server for Google Workspace.</p>
@@ -626,8 +593,8 @@ const html = `<!DOCTYPE html>
   <p style="text-align:center;font-size:0.78rem;opacity:0.45;margin-top:0.8rem;">We use Google Workspace at Cloudflare · This is a real use case for our teams</p>
 </div>
 
-<!-- ═══════ SLIDE 13 — Ecosystem & Summary ═══════ -->
-<div class="slide" data-slide="12">
+<!-- ═══════ SLIDE 12 — Ecosystem & Summary ═══════ -->
+<div class="slide" data-slide="11">
   <span class="tag">Growing Ecosystem</span>
   <h2>MCP is <span class="teal">Everywhere</span></h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">Developers have already built integrations for the tools teams use every day.</p>
@@ -658,8 +625,8 @@ const html = `<!DOCTYPE html>
   <p style="text-align:center;font-size:0.78rem;opacity:0.45;margin-top:0.8rem;">Now let's build one ourselves — on Cloudflare.</p>
 </div>
 
-<!-- ═══════ SLIDE 14 — Let's Build on Cloudflare ═══════ -->
-<div class="slide" data-slide="13">
+<!-- ═══════ SLIDE 13 — Let's Build on Cloudflare ═══════ -->
+<div class="slide" data-slide="12">
   <span class="tag">Build Section</span>
   <h2>Let's Build an MCP Server on <span class="teal">Cloudflare</span></h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">Cloudflare Workers + Agents SDK = remote MCP servers with durable state, zero cold starts, global edge deployment.</p>
@@ -692,8 +659,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 15 — Connected Council Case Study ═══════ -->
-<div class="slide" data-slide="14">
+<!-- ═══════ SLIDE 14 — Connected Council Case Study ═══════ -->
+<div class="slide" data-slide="13">
   <span class="tag">Case Study</span>
   <h2>Connected Council: <span class="teal">Smart Borough</span> MCP Server</h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:0.8rem;">A real Cloudflare project — IoT sensor network for the London Borough of Thornbridge.</p>
@@ -738,8 +705,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 16 — Architecture Deep Dive ═══════ -->
-<div class="slide" data-slide="15">
+<!-- ═══════ SLIDE 15 — Architecture Deep Dive ═══════ -->
+<div class="slide" data-slide="14">
   <span class="tag">Under the Hood</span>
   <h2>How It <span class="teal">Actually Works</span></h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:0.8rem;">The full data flow — from physical sensors to natural language answers.</p>
@@ -858,8 +825,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 17 — The Code ═══════ -->
-<div class="slide" data-slide="16">
+<!-- ═══════ SLIDE 16 — The Code ═══════ -->
+<div class="slide" data-slide="15">
   <span class="tag">Show Me the Code</span>
   <h2>Defining <span class="teal">Tools</span> in Your MCP Server</h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:0.8rem;">Extend McpAgent, bind D1, register tools with Zod schemas. The LLM discovers them automatically.</p>
@@ -900,7 +867,7 @@ const html = `<!DOCTYPE html>
 </div>
 
 <!-- ═══════ SLIDE 18 — Deploy & Connect ═══════ -->
-<div class="slide" data-slide="17">
+<div class="slide" data-slide="16">
   <span class="tag">Ship It</span>
   <h2>Deploy & <span class="teal">Connect</span></h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">One command to deploy. Any MCP host can connect instantly.</p>
@@ -958,7 +925,7 @@ const html = `<!DOCTYPE html>
 <nav class="nav">
   <button id="prev" onclick="go(-1)" disabled>◀</button>
   <div class="dots" id="dots"></div>
-  <span class="counter" id="counter">1 / 18</span>
+  <span class="counter" id="counter">1 / 17</span>
   <button id="next" onclick="go(1)">▶</button>
 </nav>
 
@@ -970,9 +937,9 @@ const html = `<!DOCTYPE html>
   const dots = document.getElementById('dots');
   const counter = document.getElementById('counter');
   const progress = document.getElementById('progress');
+  const MCP_DEF_SLIDE = 1;
   const TOOLS_SLIDE = 3;
-  const FRAG_SLIDE = 4;
-  const INTERACTIVE_SLIDE = 5;
+  const INTERACTIVE_SLIDE = 4;
 
   for (let i = 0; i < total; i++) {
     const d = document.createElement('div');
@@ -983,8 +950,8 @@ const html = `<!DOCTYPE html>
 
   function goTo(n) {
     if (n < 0 || n >= total) return;
+    if (current === MCP_DEF_SLIDE && n !== MCP_DEF_SLIDE) mcpReset();
     if (current === INTERACTIVE_SLIDE && n !== INTERACTIVE_SLIDE) iReset();
-    if (current === FRAG_SLIDE && n !== FRAG_SLIDE) fReset();
     if (current === TOOLS_SLIDE && n !== TOOLS_SLIDE) tReset();
     slides[current].classList.remove('active');
     dots.children[current].classList.remove('active');
@@ -997,8 +964,8 @@ const html = `<!DOCTYPE html>
     document.getElementById('next').disabled = current === total - 1;
   }
   function go(dir) {
+    if (current === MCP_DEF_SLIDE && dir === 1 && mcpstep < 4) { mcpAdvance(); return; }
     if (current === INTERACTIVE_SLIDE && dir === 1 && istep < 5) { iAdvance(); return; }
-    if (current === FRAG_SLIDE && dir === 1 && fstep < 2) { fAdvance(); return; }
     if (current === TOOLS_SLIDE && dir === 1 && tstep < 2) { tAdvance(); return; }
     goTo(current + dir);
   }
@@ -1082,7 +1049,7 @@ const html = `<!DOCTYPE html>
 
   const isteps = [
     { tag:'N×M Connections', title:'LLM Vendors & Tools — <span class="teal">Disconnected</span>',
-      cap:'Each LLM vendor and each tool exist independently.',
+      cap:'Each LLM vendor and each tool exist independently. Every connection requires bespoke implementation, custom prompts, custom tool calls.',
       run(){ icNodes.forEach((n,i)=>setTimeout(()=>n.classList.add('show'),i*120)); isNodes.forEach((n,i)=>setTimeout(()=>n.classList.add('show'),i*120)); document.getElementById('ilbl-c').classList.add('show'); document.getElementById('ilbl-s').classList.add('show'); }},
     { tag:'N×M Connections', title:'The Integration <span class="red">Mess</span>',
       cap:'3 vendors × 3 tools = <strong style="color:#f87171;">9 custom integrations</strong>. Every new tool multiplies the work.',
@@ -1131,65 +1098,6 @@ const html = `<!DOCTYPE html>
 
   iInit();
   window.addEventListener('resize', () => { iUpdateLines(); });
-
-  /* ═══════ Slide 5 (index 4) — fragmented chain ═══════ */
-  let fstep = -1;
-  const ftag = document.getElementById('ftag');
-  const ftitle = document.getElementById('ftitle');
-  const fsub = document.getElementById('fsub');
-  const fcap = document.getElementById('fcap');
-  const frow1 = document.getElementById('frow1');
-  const frow0 = document.getElementById('frow0');
-  const frow2 = document.getElementById('frow2');
-
-  const fsteps = [
-    { tag:'The Problem', title:'Without MCP: <span class="red">Fragmented</span> AI Development',
-      cap:'Each AI app needs to build everything from scratch.',
-      run(){
-        frow1.classList.add('show');
-        document.getElementById('f1-app').classList.add('show');
-      }},
-    { tag:'Custom Everything', title:'Every Connection is <span class="red">Bespoke</span>',
-      cap:'Custom implementation, custom prompts, custom tool calls, custom data access — <strong style="color:#f87171;">for every single tool</strong>.',
-      run(){
-        const ids = ['f1-a1','f1-impl','f1-a2','f1-prompt','f1-a3','f1-tool','f1-a4','f1-data'];
-        ids.forEach((id,i) => setTimeout(() => document.getElementById(id).classList.add('show'), i * 150));
-      }},
-    { tag:'This Does Not Scale', title:'Now Multiply by <span class="red">Every AI App…</span>',
-      cap:'Each app rebuilds the same chain independently. 3 apps = <strong style="color:#f87171;">3× the work</strong>. 100 apps = chaos.',
-      run(){
-        frow0.classList.add('show');
-        frow0.querySelectorAll('.frag-box, .frag-arrow').forEach((el,i) => setTimeout(() => el.classList.add('show'), i * 80));
-        setTimeout(() => {
-          frow2.classList.add('show');
-          frow2.querySelectorAll('.frag-box, .frag-arrow').forEach((el,i) => setTimeout(() => el.classList.add('show'), i * 80));
-        }, 400);
-      }},
-  ];
-
-  function fAdvance() {
-    if (fstep >= 2) return;
-    fstep++;
-    const s = fsteps[fstep];
-    ftag.textContent = s.tag;
-    ftitle.innerHTML = s.title;
-    fcap.innerHTML = s.cap; fcap.classList.add('show');
-    for(let i=0;i<3;i++) document.getElementById('fd'+i).classList.toggle('active',i<=fstep);
-    s.run();
-  }
-
-  function fReset() {
-    fstep = -1;
-    [frow0,frow1,frow2].forEach(r => {
-      r.classList.remove('show');
-      r.querySelectorAll('.frag-box, .frag-arrow').forEach(el => el.classList.remove('show'));
-    });
-    for(let i=0;i<3;i++) document.getElementById('fd'+i).classList.remove('active');
-    ftag.textContent = 'The Problem';
-    ftitle.innerHTML = 'Without MCP: <span class="red">Fragmented</span> AI Development';
-    fsub.style.display = '';
-    fcap.innerHTML = 'Press Enter to start'; fcap.classList.remove('show');
-  }
 
   /* ═══════ Slide 4 (index 3) — With Tools ═══════ */
   let tstep = -1;
@@ -1246,6 +1154,74 @@ const html = `<!DOCTYPE html>
     ttag.textContent = 'Connecting to Tools';
     ttitle.innerHTML = 'With tools, AI models gain <span class="teal">new capabilities</span>';
     tcap.innerHTML = 'Press Enter to start'; tcap.classList.remove('show');
+  }
+
+  /* ======= Slide 2 (index 1) -- MCP Definition interactive ======= */
+  let mcpstep = -1;
+  const mcpTag = document.getElementById('mcp-tag');
+  const mcpTitle = document.getElementById('mcp-title');
+  const mcpcap = document.getElementById('mcpcap');
+  const mcpModel = document.getElementById('mcp-model');
+  const mcpJoke = document.getElementById('mcp-joke');
+  const mcpModelDesc = document.getElementById('mcp-model-desc');
+  const mcpModelIcon = document.getElementById('mcp-model-icon');
+  const mcpProtocol = document.getElementById('mcp-protocol');
+  const mcpContext = document.getElementById('mcp-context');
+
+  const mcpSteps = [
+    { tag:'Definitions', title:'Breaking Down <span class="teal">M</span> \u00b7 C \u00b7 P',
+      cap:'The M stands for Model.',
+      run(){
+        mcpModel.style.opacity='1'; mcpModel.style.transform='translateY(0)';
+      }},
+    { tag:'The Real Model', title:'Breaking Down <span class="teal">M</span> \u00b7 C \u00b7 P',
+      cap:'Wait... when we say model...',
+      run(){
+        mcpModelIcon.style.display='none';
+        mcpJoke.style.display='flex';
+      }},
+    { tag:'Definitions', title:'Breaking Down <span class="teal">M</span> \u00b7 C \u00b7 P',
+      cap:'The LLM \u2014 billions of parameters, great at conversation. But on its own it cannot act.',
+      run(){
+        mcpJoke.style.display='none';
+        mcpModelIcon.style.display='';
+        mcpModelDesc.style.display='block';
+      }},
+    { tag:'Definitions', title:'Breaking Down M \u00b7 C \u00b7 <span class="teal">P</span>',
+      cap:'Protocol \u2014 a set of rules, like HTTP for the web. MCP defines how AI apps talk to tools.',
+      run(){
+        mcpProtocol.style.opacity='1'; mcpProtocol.style.transform='translateY(0)';
+      }},
+    { tag:'Definitions', title:'Breaking Down <span class="teal">M</span> \u00b7 <span class="teal">C</span> \u00b7 <span class="teal">P</span>',
+      cap:'Context changes everything. A doctor without patient history gives you paracetamol \u2014 connect the LLM to <em>your</em> data and the answers transform.',
+      run(){
+        mcpContext.style.opacity='1'; mcpContext.style.transform='translateY(0)';
+      }},
+  ];
+
+  function mcpAdvance() {
+    if (mcpstep >= 4) return;
+    mcpstep++;
+    const s = mcpSteps[mcpstep];
+    mcpTag.textContent = s.tag;
+    mcpTitle.innerHTML = s.title;
+    mcpcap.innerHTML = s.cap; mcpcap.classList.add('show');
+    for(let i=0;i<5;i++) document.getElementById('md'+i).classList.toggle('active',i<=mcpstep);
+    s.run();
+  }
+
+  function mcpReset() {
+    mcpstep = -1;
+    mcpModel.style.opacity='0'; mcpModel.style.transform='translateY(15px)';
+    mcpProtocol.style.opacity='0'; mcpProtocol.style.transform='translateY(15px)';
+    mcpContext.style.opacity='0'; mcpContext.style.transform='translateY(15px)';
+    mcpJoke.style.display='none';
+    mcpModelIcon.style.display='';
+    mcpModelDesc.style.display='none';
+    for(let i=0;i<5;i++) document.getElementById('md'+i).classList.remove('active');
+    mcpTag.textContent = 'Definitions';
+    mcpTitle.innerHTML = 'Breaking Down <span class="teal">M \u00b7 C \u00b7 P</span>';
+    mcpcap.innerHTML = 'Press Enter to start'; mcpcap.classList.remove('show');
   }
 
 </script>

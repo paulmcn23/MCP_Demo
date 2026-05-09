@@ -1,66 +1,62 @@
 # MCP Explained — Presenter Script
 
-*18 slides · ~20–25 minutes · press → to advance*
+*17 slides · ~20–25 minutes · press → to advance*
 
 ---
 
 ## Slide 1 — Title
 
-Today we're going to look at the Model Context Protocol, or MCP. In the past six to eight months, you've probably heard a lot of people say MCP is a game changer — and they're right. It's one of the most significant advancements in LLM integration, released by Anthropic in late 2024, and it's quickly becoming the standard that the entire industry is rallying behind.
+Today we're going to look at the Model Context Protocol, or MCP.
 
-Okay, a quick overview of the structure of today's video. First, we're going to define MCP — talk about why it's important and how it is that we use them. Then we'll be diving under the hood, in which I'll cover the fundamentals of MCP — the concepts and frameworks that govern it. Basically, everything you need to know to be able to use and build your own servers. But it is not enough just to know all these concepts. So I'll actually show you how to build one as well, both with code and no code.
+Okay, a quick overview of the structure of today's talk
 
 ---
 
-## Slide 2 — Breaking Down M · C · P
+## Slide 2 — Breaking Down M · C · P (Interactive, 5 steps)
 
 Before we dive in, let's break down the name itself — because each word matters.
 
-**Model** — that's just the LLM. A large language model like ChatGPT, Claude, or Gemini. Billions of parameters trained on vast amounts of data. You all use these every day. They're brilliant at conversation, strategising, pulling historical facts. But there's a key limitation we need to understand…
+**[Step 1]** The M stands for **Model**.
 
-**Context** — the missing ingredient. An LLM on its own only knows its training data and whatever you type in. Context means connecting the model to *your* data — your CRM, your codebase, your databases, your emails.
+**[Step 2]** noew of course when we think Model, whats the first image that comes to mind?
 
-**Protocol** — simply a set of rules. HTTP defines how browsers talk to servers. TCP/IP defines how packets travel the internet. MCP defines how AI applications talk to external tools. An agreed-upon industry standard.
+
+**[Step 3]** Okay, the *real* model. That's the LLM — a large language model like ChatGPT, Claude, or Gemini. Billions of parameters trained on vast amounts of data. You all use these every day. They're brilliant at conversation, strategising, pulling historical facts. But on its own it cannot act.
+
+**[Step 4]** **Protocol** — 
+When I meet the King
+simply a set of rules. 
+HTTP defines how browsers talk to servers. 
+TCP/IP defines how packets travel the internet. 
+MCP defines how AI applications talk to external tools. 
+An agreed-upon industry standard.
+
+**[Step 5]** And **Context** — context changes everything. Think about it in human terms: you tell a doctor "I have a headache" and they hand you paracetamol. But add "I fell off a ladder an hour ago" and suddenly you're getting a CT scan. Same question, completely different answer — because the context changed. An LLM without context is that doctor without a patient history. Connect it to *your* data — your CRM, your codebase, your emails, your databases — and the answers transform. Put them together: Model Context Protocol.
 
 ---
 
 ## Slide 3 — The LLM On Its Own
 
-So let's start with the current state. I want you to understand one important thing: LLMs by themselves are incapable of doing anything meaningful. What do I mean? If you remember the first ChatGPT — you open up any chatbot and you tell it to send you an email, it won't know how to do that. It'll just say "Sorry, I can't send emails." The most you can do with an LLM is ask it questions — ask it about some historical figure, ask it to strategise, ask it to write something. But it can't actually *do* anything. The only thing an LLM in its current state is good at is predicting the next text. So if I say "My Big Fat Greek…" — the LLM, with all its training data, will determine the next word is "Wedding." That's the most an LLM by itself can do.
+So let's start with the current state.
+ LLMs by themselves are incapable of taking action. What do I mean? If you remember the first ChatGPT — you open up any chatbot and you tell it to send you an email, it won't know how to do that. It'll just say "Sorry, I can't send emails." The most you can do with an LLM is ask it questions — ask it about some historical figure, ask it to strategise, ask it to write something. But it can't actually *do* anything. The only thing an LLM in its current state is good at is predicting the next text. So if I say "My Big Fat Greek…" — the LLM, with all its training data, will determine the next word is "Wedding." That's the most an LLM by itself can do.
 
 ---
 
 ## Slide 4 — With Tools, AI Models Gain New Capabilities (Interactive)
 
-*[Press Enter to step through each stage]*
-
 **Step 1:** The next evolution was developers figuring out how to take LLMs and combine them with tools. Think of a tool like an API — an external service. Most of us are aware that ChatGPT and these other chatbots are now able to search the internet. Perplexity, for example, lets you chat with an LLM that has the ability to fetch information from the web. The LLM itself can't do that — but they've given it access to an external service.
 
-**Step 2:** By connecting the LLM directly to the tools we use every day — Salesforce, Gmail, our internal Wiki — they become a lot more powerful. Any tool becomes accessible. Imagine every time you get an email, you want there to be an entry in a spreadsheet. If you connect that automation to your LLM, it just became a lot more meaningful.
+**Step 2:** By connecting the LLM directly to the tools we use every day — Salesforce, Gmail, our internal Wiki — they become a lot more powerful. Any tool becomes accessible. So every time you get an email, you want there to be an entry in a spreadsheet. If you connect that automation to your LLM, it just became a lot more meaningful.
 
 **Step 3:** Two things happen when we connect LLMs to tools. First, they can actually pull in **context**. If you ask it to analyse the most common job titles of new customers, and it's connected to Salesforce, it can pull in that data directly. Second — and this is the really exciting part — it moves us from just knowledge towards **action**. Rather than just writing the email, it can create the draft in Gmail or even send it outright. But here's the frustration: when you want to build an assistant that does multiple things — search the internet, read your emails, summarise documents — you start to become someone who glues a bunch of different tools together. It gets very cumbersome. If you're wondering why we don't have a Jarvis-level assistant yet, this is why.
 
 ---
 
-## Slide 5 — Without MCP: Fragmented AI Development (Interactive)
+## Slide 5 — The N×M Problem, MCP Standard & Reuse (Interactive)
 
-*[Press Enter to step through each stage]*
+But here's the catch. Without a standard, every connection is bespoke — custom implementation, custom prompts, custom tool calls, custom data access. Now let's see this at scale — the N-by-M problem.
 
-**Step 1:** But here's the catch. Without a standard, look at what happens. You have an AI application, AI App 2, on its own.
-
-**Step 2:** To connect to any tool, you need a custom implementation, custom prompt logic, custom tool calls, and custom data access. Every single piece is bespoke. Each external system has its own API — you have to custom-write the code for each one. And here's what's really frustrating: imagine Slack updates their API, or the text service makes a change. If that service is connected to other services in some step-by-step automation you've planned, it becomes a nightmare.
-
-**Step 3:** Now multiply that by every AI app. Three apps means three times the work. A hundred apps? Chaos. This is exactly the problem Anthropic saw.
-
----
-
-## Slide 6 — The N×M Problem, MCP Standard & Reuse (Interactive)
-
-*[Press Enter to step through each stage]*
-
-Now let's zoom out and see this at an even bigger scale — the N-by-M problem.
-
-**Step 1:** Here we have LLM vendors on the left — Anthropic, DeepSeek, OpenAI — and tools on the right — Slack, Google Drive, GitHub.
+**Step 1:** Here we have LLM vendors on the left — Anthropic, DeepSeek, OpenAI — and tools on the right — Slack, Google Drive, GitHub. Each one exists independently, and every connection between them requires bespoke work.
 
 **Step 2:** Previously, integrating N different LLMs with M different tools required N times M custom integrations. Every vendor had to build a separate connector for every tool. You can see the mess of connections — and this is only three by three.
 
@@ -76,7 +72,7 @@ At Cloudflare, we have dozens of internal tools and services. The idea that each
 
 ---
 
-## Slide 7 — The Evolution of LLMs
+## Slide 6 — The Evolution of LLMs
 
 Let's take a step back and look at the whole journey we've just walked through.
 
@@ -90,7 +86,7 @@ Now let's dive into the foundations of MCP so you'll understand exactly how to b
 
 ---
 
-## Slide 8 — What is the Model Context Protocol?
+## Slide 7 — What is the Model Context Protocol?
 
 Now let's get into some practicality. You can think of the MCP ecosystem as follows: you have an MCP client, you have the protocol, you have an MCP server, and you have a service.
 
@@ -108,7 +104,7 @@ But here's the fascinating part, and this is why I think Anthropic is playing 3D
 
 ---
 
-## Slide 9 — Five Building Blocks of MCP
+## Slide 8 — Five Building Blocks of MCP
 
 Okay, let's now talk about what are the things that are actually contained within an MCP server. Well, there are three major things on the server side. These are **Tools**, **Resources**, and **Prompt Templates** — TRP. And on the client side there are two more: **Roots** and **Sampling**. Five building blocks total.
 
@@ -127,7 +123,7 @@ On the **client side**:
 
 ---
 
-## Slide 10 — Client Primitives: Roots & Sampling
+## Slide 9 — Client Primitives: Roots & Sampling
 
 On the client side, Roots and Sampling are what make MCP secure and bidirectional.
 
@@ -137,7 +133,7 @@ Sampling is the really interesting one. It flips the direction — instead of th
 
 ---
 
-## Slide 11 — What MCP Servers Expose (Server Deep Dive)
+## Slide 10 — What MCP Servers Expose (Server Deep Dive)
 
 Let's zoom in on the server side. Every MCP server exposes its capabilities — Tools, Resources, and Prompt Templates — and here's the key: the LLM discovers these **dynamically** at connection time.
 
@@ -149,7 +145,7 @@ As a full example, you could have a SQLite MCP server. It gives access to a data
 
 ---
 
-## Slide 12 — Practical Example: OpenCode + Google Workspace
+## Slide 11 — Practical Example: OpenCode + Google Workspace
 
 Let's see this in action with something we actually use at Cloudflare. We use Google Workspace every day — Gmail, Drive, Calendar.
 
@@ -159,7 +155,7 @@ Using an MCP server is surprisingly easy. You grab the server config — usually
 
 ---
 
-## Slide 13 — Ecosystem & Summary
+## Slide 12 — Ecosystem & Summary
 
 The ecosystem has exploded. There are now over 20,000 pre-built MCP servers available. Developers have built integrations for Google Drive, Slack, GitHub, Git, Postgres, and many more. SDKs are available in TypeScript and Python, and anybody can write, publish, and use them.
 
@@ -175,7 +171,7 @@ Now let's build one ourselves — on Cloudflare.
 
 ---
 
-## Slide 14 — Let's Build an MCP Server on Cloudflare
+## Slide 13 — Let's Build an MCP Server on Cloudflare
 
 So we've covered what MCP is, how it works under the hood. Now I want to show you how to actually build one — and we're going to do it on Cloudflare.
 
@@ -187,7 +183,7 @@ And the deployment story is amazing. You run `wrangler deploy` and your MCP serv
 
 ---
 
-## Slide 15 — Connected Council: Smart Borough MCP Server
+## Slide 14 — Connected Council: Smart Borough MCP Server
 
 Let me show you a real project I've built called **Connected Council**. It's a smart local authority IoT platform for a fictional London borough called Thornbridge. Think of it as the kind of thing a council would use to monitor their infrastructure.
 
@@ -199,7 +195,7 @@ So you can ask the AI things like "What's the air quality in Riverside Ward?" or
 
 ---
 
-## Slide 16 — How It Actually Works (Architecture Deep Dive)
+## Slide 15 — How It Actually Works (Architecture Deep Dive)
 
 Now let me show you what's actually happening under the hood. This is the full data flow from physical sensors to a natural language answer.
 
@@ -217,7 +213,7 @@ Let me show you this live...
 
 ---
 
-## Slide 17 — Defining Tools in Your MCP Server
+## Slide 16 — Defining Tools in Your MCP Server
 
 Here's what the actual code looks like. You extend `McpAgent` with your environment type — in our case that includes the D1 binding. You create a new `McpServer` instance, and in the `init()` method, you register your tools.
 
@@ -229,7 +225,7 @@ The pattern is the same for every tool: `this.server.tool()` to register it, Zod
 
 ---
 
-## Slide 18 — Deploy & Connect
+## Slide 17 — Deploy & Connect
 
 Deploying is one command: `npx wrangler deploy`. Your MCP server is immediately live on Workers globally. The D1 database is bound, Durable Objects back each session for state management. It's running in 300+ cities worldwide with zero cold starts.
 
