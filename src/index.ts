@@ -663,19 +663,12 @@ const html = `<!DOCTYPE html>
 <div class="slide" data-slide="13">
   <span class="tag">Case Study</span>
   <h2>Connected Council: <span class="teal">Smart Borough</span> MCP Server</h2>
-  <p style="text-align:center;opacity:0.6;margin-bottom:0.8rem;">A real Cloudflare project — IoT sensor network for the London Borough of Thornbridge.</p>
-  <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;justify-content:center;max-width:800px;margin-bottom:0.8rem;">
-    <!-- Architecture flow -->
-    <div class="dbox dbox-blue" style="width:120px;">
-      <span style="font-size:1.6rem;">🏛️</span>
-      <span style="font-size:0.7rem;font-weight:600;">23 IoT Sensors</span>
-      <span style="font-size:0.55rem;opacity:0.5;">5 wards</span>
-    </div>
-    <span style="font-size:0.65rem;opacity:0.4;">→ readings →</span>
-    <div class="dbox dbox-teal" style="width:130px;">
+  <p style="text-align:center;opacity:0.6;margin-bottom:0.8rem;">A real MCP server on Cloudflare Workers — borough-wide data accessible via natural language.</p>
+  <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;justify-content:center;max-width:750px;margin-bottom:0.8rem;">
+    <div class="dbox dbox-teal" style="width:140px;">
       <span style="font-size:1.6rem;">🗄️</span>
       <span style="font-size:0.7rem;font-weight:600;">D1 Database</span>
-      <span style="font-size:0.55rem;opacity:0.5;">SQLite at the edge</span>
+      <span style="font-size:0.55rem;opacity:0.5;">29,000+ readings</span>
     </div>
     <span style="font-size:0.65rem;opacity:0.4;">→ bound to →</span>
     <div class="dbox dbox-green" style="width:150px;">
@@ -684,10 +677,10 @@ const html = `<!DOCTYPE html>
       <span style="font-size:0.55rem;opacity:0.5;">McpAgent on Workers</span>
     </div>
     <span style="font-size:0.65rem;opacity:0.4;">← MCP Protocol →</span>
-    <div class="dbox dbox-blue" style="width:120px;">
+    <div class="dbox dbox-blue" style="width:130px;">
       <span style="font-size:1.6rem;">⌨️</span>
       <span style="font-size:0.7rem;font-weight:600;">Any MCP Host</span>
-      <span style="font-size:0.55rem;opacity:0.5;">OpenCode, Cursor…</span>
+      <span style="font-size:0.55rem;opacity:0.5;">OpenCode, Cursor...</span>
     </div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;max-width:700px;width:100%;">
@@ -696,132 +689,48 @@ const html = `<!DOCTYPE html>
       <p><code>get_live_readings</code> · <code>query_history</code> · <code>list_alerts</code> · <code>get_ward_status</code> · <code>compare_wards</code> · <code>get_sensor_health</code> · <code>list_wards</code> · <code>list_sensors</code></p>
     </div>
     <div class="card" style="font-size:0.75rem;">
-      <h3 style="color:#a78bfa;font-size:0.85rem;">📡 Sensor Types</h3>
-      <p>Air quality · Temperature · Flood level · Bin fill · Parking · Street lights · Noise · Energy meters</p>
+      <h3 style="color:#a78bfa;font-size:0.85rem;">� Data Coverage</h3>
+      <p>5 wards · 23 sensors · Air quality · Temperature · Flood level · Bin fill · Parking · Noise · Energy</p>
     </div>
   </div>
-  <div style="background:#2dd4bf0d;border:1px solid #2dd4bf33;border-radius:12px;padding:0.5rem 1rem;max-width:700px;width:100%;margin-top:0.6rem;text-align:center;">
-    <p style="font-size:0.75rem;">🏗️ Ask the AI: <em>"What's the air quality in Riverside Ward?"</em> or <em>"Compare flood levels between Parklands and Industrial"</em> — it uses MCP tools to query D1 directly.</p>
+  <div style="background:#fbbf2411;border:1px solid #fbbf2433;border-radius:12px;padding:0.5rem 1rem;max-width:700px;width:100%;margin-top:0.6rem;text-align:center;">
+    <p style="font-size:0.75rem;">💡 The D1 database is seeded with <strong style="color:#fbbf24;">14 days of realistic data</strong> across all sensors and wards. The MCP server is deployed and live — let's query it.</p>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 15 — Architecture Deep Dive ═══════ -->
+<!-- ═══════ SLIDE 15 — Live Demo ═══════ -->
 <div class="slide" data-slide="14">
-  <span class="tag">Under the Hood</span>
-  <h2>How It <span class="teal">Actually Works</span></h2>
-  <p style="text-align:center;opacity:0.6;margin-bottom:0.8rem;">The full data flow — from physical sensors to natural language answers.</p>
+  <span class="tag">Live Demo</span>
+  <h2>Let's <span class="teal">Query It</span></h2>
+  <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">The MCP server is deployed on Cloudflare Workers. Let's connect and ask it questions.</p>
 
-  <!-- Architecture diagram -->
-  <div style="display:flex;flex-direction:column;gap:0.4rem;max-width:850px;width:100%;align-items:center;">
-
-    <!-- Row 1: Sensors -->
-    <div style="display:flex;gap:0.6rem;align-items:center;justify-content:center;flex-wrap:wrap;">
-      <div style="background:#1e293b;border:2px dashed #3b82f644;border-radius:12px;padding:0.5rem 0.7rem;text-align:center;">
-        <div style="font-size:1.2rem;">🌡️</div>
-        <div style="font-size:0.6rem;opacity:0.5;">Temperature</div>
-      </div>
-      <div style="background:#1e293b;border:2px dashed #3b82f644;border-radius:12px;padding:0.5rem 0.7rem;text-align:center;">
-        <div style="font-size:1.2rem;">🌊</div>
-        <div style="font-size:0.6rem;opacity:0.5;">Flood Level</div>
-      </div>
-      <div style="background:#1e293b;border:2px dashed #3b82f644;border-radius:12px;padding:0.5rem 0.7rem;text-align:center;">
-        <div style="font-size:1.2rem;">🗑️</div>
-        <div style="font-size:0.6rem;opacity:0.5;">Bin Fill</div>
-      </div>
-      <div style="background:#1e293b;border:2px dashed #3b82f644;border-radius:12px;padding:0.5rem 0.7rem;text-align:center;">
-        <div style="font-size:1.2rem;">💨</div>
-        <div style="font-size:0.6rem;opacity:0.5;">Air Quality</div>
-      </div>
-      <div style="background:#1e293b;border:2px dashed #3b82f644;border-radius:12px;padding:0.5rem 0.7rem;text-align:center;">
-        <div style="font-size:1.2rem;">🅿️</div>
-        <div style="font-size:0.6rem;opacity:0.5;">Parking</div>
-      </div>
-      <div style="background:#1e293b;border:2px dashed #3b82f644;border-radius:12px;padding:0.5rem 0.7rem;text-align:center;">
-        <div style="font-size:1.2rem;">🔊</div>
-        <div style="font-size:0.6rem;opacity:0.5;">Noise</div>
-      </div>
-    </div>
-    <div style="font-size:0.65rem;opacity:0.3;">23 IoT sensors across 5 wards</div>
-    <div style="font-size:1rem;opacity:0.3;">▼</div>
-    <div style="font-size:0.6rem;opacity:0.4;background:#334155;padding:0.15rem 0.5rem;border-radius:4px;">MQTT / HTTP</div>
-    <div style="font-size:1rem;opacity:0.3;">▼</div>
-
-    <!-- Row 2: Cloudflare Edge -->
-    <div style="background:#0f172a;border:2px solid #f6821f55;border-radius:16px;padding:1rem 1.5rem;width:100%;max-width:780px;position:relative;">
-      <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#f6821f;color:#111;font-size:0.65rem;font-weight:700;padding:0.15rem 0.7rem;border-radius:6px;">CLOUDFLARE EDGE</div>
-      <div style="display:flex;align-items:center;justify-content:center;gap:0.8rem;flex-wrap:wrap;">
-
-        <div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:0.6rem 0.8rem;text-align:center;min-width:100px;">
-          <div style="font-size:1.1rem;">⚡</div>
-          <div style="font-size:0.72rem;font-weight:600;">Worker</div>
-          <div style="font-size:0.58rem;opacity:0.4;">Ingress</div>
-        </div>
-
-        <div style="font-size:0.7rem;opacity:0.3;">→</div>
-
-        <div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:0.6rem 0.8rem;text-align:center;min-width:100px;">
-          <div style="font-size:1.1rem;">🗄️</div>
-          <div style="font-size:0.72rem;font-weight:600;">D1</div>
-          <div style="font-size:0.58rem;opacity:0.4;">SQLite at Edge</div>
-        </div>
-
-        <div style="font-size:0.7rem;opacity:0.3;">→</div>
-
-        <div style="background:#27272d;border:2px solid #fbbf2466;border-radius:10px;padding:0.6rem 0.8rem;text-align:center;min-width:120px;">
-          <div style="font-size:1.1rem;">🖥️</div>
-          <div style="font-size:0.72rem;font-weight:700;color:#fbbf24;">MCP Server</div>
-          <div style="font-size:0.58rem;opacity:0.4;">McpAgent + SSE</div>
-        </div>
-
-        <div style="font-size:0.7rem;opacity:0.3;">→</div>
-
-        <div style="display:flex;flex-direction:column;gap:0.3rem;">
-          <div style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:0.35rem 0.6rem;text-align:center;">
-            <div style="font-size:0.65rem;font-weight:600;">📊 Dashboard</div>
-            <div style="font-size:0.52rem;opacity:0.4;">Pages</div>
-          </div>
-          <div style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:0.35rem 0.6rem;text-align:center;">
-            <div style="font-size:0.65rem;font-weight:600;">🚨 Alerts</div>
-            <div style="font-size:0.52rem;opacity:0.4;">Queues + Workflows</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div style="font-size:1rem;opacity:0.3;">▼</div>
-    <div style="font-size:0.6rem;opacity:0.4;background:#2dd4bf22;color:#2dd4bf;padding:0.15rem 0.5rem;border-radius:4px;font-weight:600;">MCP Protocol (SSE)</div>
-    <div style="font-size:1rem;opacity:0.3;">▼</div>
-
-    <!-- Row 3: AI Consumers -->
-    <div style="display:flex;gap:1rem;align-items:center;justify-content:center;flex-wrap:wrap;">
-      <div style="background:#27272d;border:2px solid #2dd4bf44;border-radius:12px;padding:0.6rem 1rem;text-align:center;">
-        <div style="font-size:1.3rem;">🧠</div>
-        <div style="font-size:0.72rem;font-weight:600;">Claude Desktop</div>
-      </div>
-      <div style="background:#27272d;border:2px solid #2dd4bf44;border-radius:12px;padding:0.6rem 1rem;text-align:center;">
-        <div style="font-size:1.3rem;">⌨️</div>
-        <div style="font-size:0.72rem;font-weight:600;">Windsurf</div>
-      </div>
-      <div style="background:#27272d;border:2px solid #2dd4bf44;border-radius:12px;padding:0.6rem 1rem;text-align:center;">
-        <div style="font-size:1.3rem;">💬</div>
-        <div style="font-size:0.72rem;font-weight:600;">Any MCP Host</div>
-      </div>
-    </div>
-    <div style="font-size:0.65rem;opacity:0.3;">Council staff ask natural language questions</div>
-
+  <div class="code-block" style="font-size:0.7rem;max-width:620px;margin-bottom:1rem;">
+    <span style="color:#555;">// MCP server config — paste into any host</span><br>
+    {<br>
+    &nbsp;&nbsp;<span style="color:#a78bfa;">"council"</span>: {<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#a78bfa;">"url"</span>: <span style="color:#34d399;">"https://connected-council.pmcnamara.workers.dev/sse"</span><br>
+    &nbsp;&nbsp;}<br>
+    }
   </div>
 
-  <div style="display:flex;gap:0.6rem;max-width:700px;width:100%;margin-top:0.6rem;justify-content:center;flex-wrap:wrap;">
-    <div style="background:#3b82f611;border:1px solid #3b82f633;border-radius:8px;padding:0.3rem 0.6rem;font-size:0.62rem;text-align:center;">
-      <strong style="color:#60a5fa;">No origin server</strong> — everything at the edge
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;max-width:700px;width:100%;">
+    <div class="card" style="text-align:center;">
+      <h3 style="color:#2dd4bf;font-size:0.85rem;">Try asking...</h3>
+      <p style="font-size:0.78rem;"><em>"What's the air quality in Riverside Ward?"</em></p>
+      <p style="font-size:0.78rem;"><em>"Compare flood levels between Parklands and Industrial"</em></p>
+      <p style="font-size:0.78rem;"><em>"Which bins need collecting?"</em></p>
     </div>
-    <div style="background:#f6821f11;border:1px solid #f6821f33;border-radius:8px;padding:0.3rem 0.6rem;font-size:0.62rem;text-align:center;">
-      <strong style="color:#f6821f;">15+ CF products</strong> — one coherent platform
+    <div class="card" style="text-align:center;">
+      <h3 style="color:#fbbf24;font-size:0.85rem;">What happens</h3>
+      <p style="font-size:0.78rem;"><strong style="color:#2dd4bf;">1.</strong> LLM reads the tool descriptions</p>
+      <p style="font-size:0.78rem;"><strong style="color:#2dd4bf;">2.</strong> Picks the right tool + parameters</p>
+      <p style="font-size:0.78rem;"><strong style="color:#2dd4bf;">3.</strong> MCP server queries D1</p>
+      <p style="font-size:0.78rem;"><strong style="color:#2dd4bf;">4.</strong> Answer in plain English</p>
     </div>
-    <div style="background:#2dd4bf11;border:1px solid #2dd4bf33;border-radius:8px;padding:0.3rem 0.6rem;font-size:0.62rem;text-align:center;">
-      <strong style="color:#2dd4bf;">MCP = AI-native API</strong> — build once, any LLM host
-    </div>
+  </div>
+
+  <div style="background:#fbbf2411;border:2px solid #fbbf2444;border-radius:12px;padding:0.6rem 1.2rem;max-width:700px;width:100%;margin-top:1rem;text-align:center;">
+    <p style="font-size:0.85rem;font-weight:700;color:#fbbf24;">⌨️ Switching to terminal for live demo...</p>
   </div>
 </div>
 
