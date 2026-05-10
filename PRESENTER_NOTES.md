@@ -138,7 +138,7 @@ Run `wrangler deploy` and you're live globally. No containers, no cold starts. I
 
 ## Slide 14 — Connected Council: Smart Borough MCP Server
 
-A real project: **Connected Council** — an MCP server for the fictional London Borough of Thornbridge. The D1 database is seeded with over 29,000 readings across 5 wards and 23 sensors — air quality, temperature, flood levels, bin fill, parking, noise, energy.
+A real project: **Connected Council** — an MCP server for the fictional London Borough of Thornbridge. I do have a Raspberry Pi and physical sensors for this project, but I haven't connected them yet — so today we're working with seeded data in D1. Over 29,000 readings across 5 wards and 23 sensors — air quality, temperature, flood levels, bin fill, parking, noise, energy. The end goal is the Pi feeds real sensor data into D1, but the MCP server and tools are the same either way.
 
 The MCP server exposes 8 tools. The AI discovers them at connection time and picks the right one based on your question. No special prompting needed.
 
@@ -146,17 +146,19 @@ The MCP server exposes 8 tools. The AI discovers them at connection time and pic
 
 ## Slide 15 — Live Demo
 
-This is the fun part. The MCP server is already deployed on Workers. All we need is the SSE endpoint URL — paste it into any MCP host and you're connected.
+This is the fun part. I'm running the MCP server locally with `wrangler dev` — same code that deploys to Workers, same D1 database, same MCP protocol. The URL is just `localhost:8790/sse`. I've already added it to my IDE's MCP config.
 
-I'm going to switch to my terminal and connect to the live server. Let's ask it some real questions — "What's the air quality in Riverside Ward?", "Compare flood levels between Parklands and Industrial", "Which bins need collecting?" Watch how the LLM reads the tool descriptions, picks the right tool and parameters, the MCP server queries D1, and you get the answer in plain English.
+I'm going to switch to my terminal and ask it some real questions — "What's the air quality in Riverside Ward?", "Compare flood levels between Parklands and Industrial", "Which bins need collecting?" Watch how the LLM reads the tool descriptions, picks the right tool and parameters, the MCP server queries D1, and you get the answer in plain English.
 
-This is the whole point of MCP in action — I built this server once, deployed it with one command, and any AI host can query this borough data.
+This is the whole point of MCP in action — I built this server once and any AI host can query this borough data. When I'm ready to go live, it's just `wrangler deploy`.
 
 ---
 
-## Slide 16 — Defining Tools in Your MCP Server
+## Slide 16 — How MCP Talks
 
-You extend McpAgent, create a McpServer, register tools in `init()`. Each tool gets a name, a description the LLM reads, and a Zod schema for parameters. Inside the handler, `this.env.DB` gives you D1 — write SQL, bind parameters, return results. Same pattern for every tool.
+Quick look at how MCP communicates. The current transport is **Streamable HTTP** — the client sends JSON-RPC requests over a standard HTTP POST to a single endpoint. The server can respond inline or upgrade to SSE (Server-Sent Events) for streaming long-running results.
+
+The key point: it's just HTTP. No WebSockets required, no proprietary protocols. Works through firewalls, uses standard OAuth for auth, you can debug it with curl. That's what makes remote MCP servers practical — deploy behind any CDN or load balancer and it just works.
 
 ---
 

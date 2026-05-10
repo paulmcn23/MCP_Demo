@@ -665,22 +665,22 @@ const html = `<!DOCTYPE html>
   <h2>Connected Council: <span class="teal">Smart Borough</span> MCP Server</h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:0.8rem;">A real MCP server on Cloudflare Workers — borough-wide data accessible via natural language.</p>
   <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;justify-content:center;max-width:750px;margin-bottom:0.8rem;">
-    <div class="dbox dbox-teal" style="width:140px;">
-      <span style="font-size:1.6rem;">🗄️</span>
-      <span style="font-size:0.7rem;font-weight:600;">D1 Database</span>
-      <span style="font-size:0.55rem;opacity:0.5;">29,000+ readings</span>
+    <div class="dbox dbox-blue" style="width:130px;">
+      <span style="font-size:1.6rem;">⌨️</span>
+      <span style="font-size:0.7rem;font-weight:600;">Any MCP Host</span>
+      <span style="font-size:0.55rem;opacity:0.5;">OpenCode, Cursor...</span>
     </div>
-    <span style="font-size:0.65rem;opacity:0.4;">→ bound to →</span>
+    <span style="font-size:0.65rem;opacity:0.4;">→ MCP Protocol →</span>
     <div class="dbox dbox-green" style="width:150px;">
       <span style="font-size:1.6rem;">🖥️</span>
       <span style="font-size:0.7rem;font-weight:600;">MCP Server</span>
       <span style="font-size:0.55rem;opacity:0.5;">McpAgent on Workers</span>
     </div>
-    <span style="font-size:0.65rem;opacity:0.4;">← MCP Protocol →</span>
-    <div class="dbox dbox-blue" style="width:130px;">
-      <span style="font-size:1.6rem;">⌨️</span>
-      <span style="font-size:0.7rem;font-weight:600;">Any MCP Host</span>
-      <span style="font-size:0.55rem;opacity:0.5;">OpenCode, Cursor...</span>
+    <span style="font-size:0.65rem;opacity:0.4;">→ queries →</span>
+    <div class="dbox dbox-teal" style="width:140px;">
+      <span style="font-size:1.6rem;">🗄️</span>
+      <span style="font-size:0.7rem;font-weight:600;">D1 Database</span>
+      <span style="font-size:0.55rem;opacity:0.5;">29,000+ readings</span>
     </div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;max-width:700px;width:100%;">
@@ -702,13 +702,13 @@ const html = `<!DOCTYPE html>
 <div class="slide" data-slide="14">
   <span class="tag">Live Demo</span>
   <h2>Let's <span class="teal">Query It</span></h2>
-  <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">The MCP server is deployed on Cloudflare Workers. Let's connect and ask it questions.</p>
+  <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">Running locally with <code>wrangler dev</code>. Same code, same D1 database, same MCP protocol.</p>
 
   <div class="code-block" style="font-size:0.7rem;max-width:620px;margin-bottom:1rem;">
     <span style="color:#555;">// MCP server config — paste into any host</span><br>
     {<br>
     &nbsp;&nbsp;<span style="color:#a78bfa;">"council"</span>: {<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#a78bfa;">"url"</span>: <span style="color:#34d399;">"https://connected-council.pmcnamara.workers.dev/sse"</span><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#a78bfa;">"url"</span>: <span style="color:#34d399;">"http://localhost:8790/sse"</span><br>
     &nbsp;&nbsp;}<br>
     }
   </div>
@@ -734,43 +734,35 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 16 — The Code ═══════ -->
+<!-- ═══════ SLIDE 16 — How MCP Talks ═══════ -->
 <div class="slide" data-slide="15">
-  <span class="tag">Show Me the Code</span>
-  <h2>Defining <span class="teal">Tools</span> in Your MCP Server</h2>
-  <p style="text-align:center;opacity:0.6;margin-bottom:0.8rem;">Extend McpAgent, bind D1, register tools with Zod schemas. The LLM discovers them automatically.</p>
-  <div class="code-block" style="font-size:0.65rem;max-width:760px;line-height:1.5;">
-    <span style="color:#c792ea;">export class</span> <span style="color:#fbbf24;">CouncilMCP</span> <span style="color:#c792ea;">extends</span> McpAgent&lt;Env&gt; {<br>
-    &nbsp;&nbsp;server = <span style="color:#c792ea;">new</span> McpServer({ <span style="color:#a78bfa;">name</span>: <span style="color:#34d399;">"Connected Council"</span> });<br>
-    <br>
-    &nbsp;&nbsp;<span style="color:#c792ea;">async</span> <span style="color:#6b9fff;">init</span>() {<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#555;">// ── Tool: Get live sensor readings ──</span><br>
-    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#c792ea;">this</span>.server.<span style="color:#fbbf24;">tool</span>(<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#34d399;">"get_live_readings"</span>,<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#34d399;">"Get the most recent sensor readings for a ward"</span>,<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{ <span style="color:#a78bfa;">ward_id</span>: z.string().optional(), <span style="color:#a78bfa;">sensor_type</span>: z.string().optional() },<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#c792ea;">async</span> ({ ward_id, sensor_type }) =&gt; {<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#c792ea;">const</span> result = <span style="color:#c792ea;">await</span> <span style="color:#c792ea;">this</span>.env.DB.prepare(query).bind(...params).all();<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#c792ea;">return</span> { content: [{ type: <span style="color:#34d399;">"text"</span>, text: JSON.stringify(result) }] };<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;);<br>
-    <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#555;">// ── Tool: Query historical data ──</span><br>
-    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#c792ea;">this</span>.server.<span style="color:#fbbf24;">tool</span>(<span style="color:#34d399;">"query_history"</span>, <span style="color:#34d399;">"Query historical readings with aggregation"</span>, { ... });<br>
-    <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#555;">// ── Tool: List alerts, Compare wards, Sensor health... ──</span><br>
-    &nbsp;&nbsp;}<br>
-    }
+  <span class="tag">Under the Hood</span>
+  <h2>How MCP <span class="teal">Talks</span></h2>
+  <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">MCP uses standard HTTP — no proprietary protocols, no SDKs on the client side.</p>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;max-width:720px;width:100%;">
+    <div class="card">
+      <h3 style="color:#2dd4bf;font-size:0.85rem;">Streamable HTTP</h3>
+      <p style="font-size:0.75rem;">The current MCP transport. Client sends <strong>JSON-RPC over HTTP POST</strong> to a single endpoint (<code>/sse</code> or <code>/mcp</code>).</p>
+      <p style="font-size:0.75rem;">Server responds inline or upgrades to <strong>SSE</strong> (Server-Sent Events) for streaming results.</p>
+      <p style="font-size:0.68rem;opacity:0.5;margin-top:0.4rem;">Stateless by default. Optional <code>Mcp-Session-Id</code> header for stateful sessions.</p>
+    </div>
+    <div class="card">
+      <h3 style="color:#a78bfa;font-size:0.85rem;">What that means</h3>
+      <p style="font-size:0.75rem;"><strong style="color:#2dd4bf;">Firewalls?</strong> Just HTTPS on port 443.</p>
+      <p style="font-size:0.75rem;"><strong style="color:#2dd4bf;">Auth?</strong> Standard OAuth 2.1 / bearer tokens.</p>
+      <p style="font-size:0.75rem;"><strong style="color:#2dd4bf;">Scale?</strong> Deploy behind any CDN or load balancer.</p>
+      <p style="font-size:0.75rem;"><strong style="color:#2dd4bf;">Debug?</strong> <code>curl</code> it. It's just HTTP.</p>
+    </div>
   </div>
-  <div style="display:flex;gap:0.6rem;max-width:700px;width:100%;margin-top:0.8rem;justify-content:center;flex-wrap:wrap;">
+  <div style="display:flex;gap:0.6rem;max-width:720px;width:100%;margin-top:0.8rem;justify-content:center;flex-wrap:wrap;">
+    <div style="background:#2dd4bf11;border:1px solid #2dd4bf33;border-radius:8px;padding:0.4rem 0.8rem;font-size:0.68rem;text-align:center;">
+      <strong style="color:#2dd4bf;">JSON-RPC 2.0</strong> — request/response format
+    </div>
     <div style="background:#fbbf2411;border:1px solid #fbbf2433;border-radius:8px;padding:0.4rem 0.8rem;font-size:0.68rem;text-align:center;">
-      <strong style="color:#fbbf24;">this.server.tool()</strong> — register a callable function
+      <strong style="color:#fbbf24;">HTTP POST</strong> — single endpoint, standard verbs
     </div>
     <div style="background:#a78bfa11;border:1px solid #a78bfa33;border-radius:8px;padding:0.4rem 0.8rem;font-size:0.68rem;text-align:center;">
-      <strong style="color:#a78bfa;">this.env.DB</strong> — D1 binding, query SQLite directly
-    </div>
-    <div style="background:#2dd4bf11;border:1px solid #2dd4bf33;border-radius:8px;padding:0.4rem 0.8rem;font-size:0.68rem;text-align:center;">
-      <strong style="color:#2dd4bf;">z.string().optional()</strong> — Zod schema for params
+      <strong style="color:#a78bfa;">SSE</strong> — optional streaming for long-running tools
     </div>
   </div>
 </div>
