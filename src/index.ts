@@ -625,12 +625,9 @@ const html = `<!DOCTYPE html>
       <p><code>get_live_readings</code> · <code>query_history</code> · <code>list_alerts</code> · <code>get_ward_status</code> · <code>compare_wards</code> · <code>get_sensor_health</code> · <code>list_wards</code> · <code>list_sensors</code></p>
     </div>
     <div class="card" style="font-size:0.75rem;">
-      <h3 style="color:#a78bfa;font-size:0.85rem;">� Data Coverage</h3>
-      <p>5 wards · 23 sensors · Air quality · Temperature · Flood level · Bin fill · Parking · Noise · Energy</p>
+      <h3 style="color:#a78bfa;font-size:0.85rem;">📡 The Vision: Pub/Sub on Cloudflare</h3>
+      <p><strong>Pub/Sub</strong> = publish/subscribe messaging — sensors push data, services consume it in real time. The plan: a Raspberry Pi with physical sensors publishing into D1 via Workers. Today: <strong style="color:#fbbf24;">seeded test data locally</strong>.</p>
     </div>
-  </div>
-  <div style="background:#fbbf2411;border:1px solid #fbbf2433;border-radius:12px;padding:0.5rem 1rem;max-width:700px;width:100%;margin-top:0.6rem;text-align:center;">
-    <p style="font-size:0.75rem;">💡 The D1 database is seeded with <strong style="color:#fbbf24;">14 days of realistic data</strong> across all sensors and wards. The MCP server is deployed and live — let's query it.</p>
   </div>
 </div>
 
@@ -665,46 +662,25 @@ const html = `<!DOCTYPE html>
     </div>
   </div>
 
-  <div style="background:#fbbf2411;border:2px solid #fbbf2444;border-radius:12px;padding:0.6rem 1.2rem;max-width:700px;width:100%;margin-top:1rem;text-align:center;">
+  <div style="display:flex;gap:0.6rem;max-width:700px;width:100%;margin-top:0.8rem;justify-content:center;flex-wrap:wrap;">
+    <div style="background:#2dd4bf11;border:1px solid #2dd4bf33;border-radius:8px;padding:0.4rem 0.8rem;font-size:0.68rem;text-align:center;">
+      <strong style="color:#2dd4bf;">Streamable HTTP</strong> — JSON-RPC over standard HTTP POST
+    </div>
+    <div style="background:#fbbf2411;border:1px solid #fbbf2433;border-radius:8px;padding:0.4rem 0.8rem;font-size:0.68rem;text-align:center;">
+      <strong style="color:#fbbf24;">SSE</strong> — Server-Sent Events for streaming responses
+    </div>
+    <div style="background:#a78bfa11;border:1px solid #a78bfa33;border-radius:8px;padding:0.4rem 0.8rem;font-size:0.68rem;text-align:center;">
+      <strong style="color:#a78bfa;">Just HTTP</strong> — works through firewalls, debug with curl
+    </div>
+  </div>
+
+  <div style="background:#fbbf2411;border:2px solid #fbbf2444;border-radius:12px;padding:0.6rem 1.2rem;max-width:700px;width:100%;margin-top:0.8rem;text-align:center;">
     <p style="font-size:0.85rem;font-weight:700;color:#fbbf24;">⌨️ Switching to terminal for live demo...</p>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 14 — How MCP Talks ═══════ -->
+<!-- ═══════ SLIDE 14 — Deploy & Connect ═══════ -->
 <div class="slide" data-slide="13">
-  <span class="tag">Under the Hood</span>
-  <h2>How MCP <span class="teal">Talks</span></h2>
-  <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">MCP uses standard HTTP — no proprietary protocols, no SDKs on the client side.</p>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;max-width:720px;width:100%;">
-    <div class="card">
-      <h3 style="color:#2dd4bf;font-size:0.85rem;">Streamable HTTP</h3>
-      <p style="font-size:0.75rem;">The current MCP transport. Client sends <strong>JSON-RPC over HTTP POST</strong> to a single endpoint (<code>/sse</code> or <code>/mcp</code>).</p>
-      <p style="font-size:0.75rem;">Server responds inline or upgrades to <strong>SSE</strong> (Server-Sent Events) for streaming results.</p>
-      <p style="font-size:0.68rem;opacity:0.5;margin-top:0.4rem;">Stateless by default. Optional <code>Mcp-Session-Id</code> header for stateful sessions.</p>
-    </div>
-    <div class="card">
-      <h3 style="color:#a78bfa;font-size:0.85rem;">What that means</h3>
-      <p style="font-size:0.75rem;"><strong style="color:#2dd4bf;">Firewalls?</strong> Just HTTPS on port 443.</p>
-      <p style="font-size:0.75rem;"><strong style="color:#2dd4bf;">Auth?</strong> Standard OAuth 2.1 / bearer tokens.</p>
-      <p style="font-size:0.75rem;"><strong style="color:#2dd4bf;">Scale?</strong> Deploy behind any CDN or load balancer.</p>
-      <p style="font-size:0.75rem;"><strong style="color:#2dd4bf;">Debug?</strong> <code>curl</code> it. It's just HTTP.</p>
-    </div>
-  </div>
-  <div style="display:flex;gap:0.6rem;max-width:720px;width:100%;margin-top:0.8rem;justify-content:center;flex-wrap:wrap;">
-    <div style="background:#2dd4bf11;border:1px solid #2dd4bf33;border-radius:8px;padding:0.4rem 0.8rem;font-size:0.68rem;text-align:center;">
-      <strong style="color:#2dd4bf;">JSON-RPC 2.0</strong> — request/response format
-    </div>
-    <div style="background:#fbbf2411;border:1px solid #fbbf2433;border-radius:8px;padding:0.4rem 0.8rem;font-size:0.68rem;text-align:center;">
-      <strong style="color:#fbbf24;">HTTP POST</strong> — single endpoint, standard verbs
-    </div>
-    <div style="background:#a78bfa11;border:1px solid #a78bfa33;border-radius:8px;padding:0.4rem 0.8rem;font-size:0.68rem;text-align:center;">
-      <strong style="color:#a78bfa;">SSE</strong> — optional streaming for long-running tools
-    </div>
-  </div>
-</div>
-
-<!-- ═══════ SLIDE 15 — Deploy & Connect ═══════ -->
-<div class="slide" data-slide="14">
   <span class="tag">Ship It</span>
   <h2>Deploy & <span class="teal">Connect</span></h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">One command to deploy. Any MCP host can connect instantly.</p>
@@ -755,6 +731,23 @@ const html = `<!DOCTYPE html>
     </p>
     <p style="font-size:0.75rem;opacity:0.35;">Built with Cloudflare Workers · Paul McNamara · Inspired by ByteByteGo</p>
   </div>
+</div>
+
+<!-- ═══════ SLIDE 15 — Thank You ═══════ -->
+<div class="slide" data-slide="14">
+  <h2 style="margin-bottom:0.5rem;">Thank <span class="teal">You</span></h2>
+  <div style="margin:1rem 0;">
+    <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QC8RXhpZgAATU0AKgAAAAgABQESAAMAAAABAAEAAAEaAAUAAAABAAAASgEbAAUAAAABAAAAUgEoAAMAAAABAAIAAIdpAAQAAAABAAAAWgAAAAAAAABIAAAAAQAAAEgAAAABAAeQAAAHAAAABDAyMjGRAQAHAAAABAECAwCgAAAHAAAABDAxMDCgAQADAAAAAQABAACgAgAEAAAAAQAAAJagAwAEAAAAAQAAAJakBgADAAAAAQAAAAAAAAAA/8AAEQgAlgCWAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKC//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+v/EAB8BAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKC//EALURAAIBAgQEAwQHBQQEAAECdwABAgMRBAUhMQYSQVEHYXETIjKBCBRCkaGxwQkjM1LwFWJy0QoWJDThJfEXGBkaJicoKSo1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoKDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uLj5OXm5+jp6vLz9PX29/j5+v/bAEMAAgICAgICAwICAwUDAwMFBgUFBQUGCAYGBgYGCAoICAgICAgKCgoKCgoKCgwMDAwMDA4ODg4ODw8PDw8PDw8PD//bAEMBAgICBAQEBwQEBxALCQsQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEP/dAAQACv/aAAwDAQACEQMRAD8A/SPxr8UrbSLtILeQEHvXA6r8b7ezjVVmG5sd6/P/AOIfxNvZr140LGROhry9fH011tMspMinp3r5fHZ/Xc2onNChGx+y3hj4waZLYJJdTDcw9a0PEfxd0ixtkkjmBLEd6/IKw+KVxagW8jsuPUkV1EnjWfVrQs0zEemeamjxTXtyyQfVle5+xvgzxVY+JdPSe3cEketdk4JFflL8I/jZN4XxBey5jXpk9vSvsvQP2gtC1CFXuZVAI9hX0WV8RUq0VzuzMalFrY+hvKpWgwK4LQPiLpGvyhLVshq9HaePaCe4r6GFZTV4mFjNaJh71GUfpitVbm2C89azri+iViq0OrYaptiJbsThq0lsYWTn9Kwf7TAOM1Kuqdg1ZusmXGmXpLGNCTniq5gjAIDGs+51lVGGOayRrYLkCo9qacpsSQAHiqpQjNPS9WUZz1oJyNwPFVGsRKmVSQDzTtwpxjZ+QM1Ils7HCjmtlLQz12IiM0bRVlraVPvKfypnlP8A3T+VUXyI/9DwzxJbzo8kgDSs/wCOPxrifCnhrULjxTFNdoy27EKc/WveNHiW/tQ8ygsRzmu+0TwrFMrPBgOvJ4FfmOHxz9quZCcdNDLvPhPp+pCG5GImUZP+1Xleraa/hzVGsy/7gcg17Vqlt4pQNBYPgJ3J6+3FeDeKYNTu52tLrmd/lznvX0dd06kbqJnG5DfazAkZFi4YqOo9ataF4ovpbmK1eUoAegPBrir/AMLal4atFmuJNyng571WsdUsrLF+7gNGema+WrVI0Klpbmi1P1o+Ct3pq2kM88ojyAcsfSvSfFXxm0XQdQjs3u1wxxwc1+NmoftHavp1kbbQywYfLkdOO9eUr8QvGXi...[8746 bytes truncated]" style="width:180px;height:180px;object-fit:cover;border-radius:16px;border:2px solid #35353d;" alt="The real model">
+  </div>
+  <p style="font-size:1.1rem;opacity:0.7;margin-bottom:1.5rem;font-style:italic;">No models were harmed in the production of this content.</p>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+    <a href="https://developers.cloudflare.com/agents/model-context-protocol/" style="color:#2dd4bf;text-decoration:none;border-bottom:1px solid #2dd4bf44;font-weight:600;font-size:0.85rem;">Cloudflare MCP Docs</a>
+    <span style="opacity:0.3;">·</span>
+    <a href="https://modelcontextprotocol.io" style="color:#6b9fff;text-decoration:none;border-bottom:1px solid #6b9fff44;font-weight:600;font-size:0.85rem;">modelcontextprotocol.io</a>
+    <span style="opacity:0.3;">·</span>
+    <a href="https://github.com/modelcontextprotocol" style="color:#34d399;text-decoration:none;border-bottom:1px solid #34d39944;font-weight:600;font-size:0.85rem;">GitHub</a>
+  </div>
+  <p style="font-size:0.72rem;opacity:0.3;margin-top:1rem;">Paul McNamara · Built with Cloudflare Workers</p>
 </div>
 
 </div><!-- /deck -->

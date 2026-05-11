@@ -1,6 +1,6 @@
 # MCP Explained — Presenter Script
 
-*15 slides · ~15–20 minutes · press → to advance*
+*15 slides (0–14) · ~15–20 minutes · press → to advance*
 
 ---
 
@@ -135,37 +135,35 @@ MCP doesn't replace APIs — it's an AI-friendly layer on top. Now let's build o
 
 ## Slide 12 — Connected Council: Smart Borough MCP Server
 
-A real project: **Connected Council** — an MCP server for the fictional London Borough of Thornbridge. I do have a Raspberry Pi and physical sensors for this project, but I haven't connected them yet — so today we're working with seeded data in D1. Over 29,000 readings across 5 wards and 23 sensors — air quality, temperature, flood levels, bin fill, parking, noise, energy. The end goal is the Pi feeds real sensor data into D1, but the MCP server and tools are the same either way.
+A real project: **Connected Council** — an MCP server for the fictional London Borough of Thornbridge. I do have a Raspberry Pi and physical sensors for this project, but I haven't connected them yet. The bigger vision here is building a **pub/sub model on Cloudflare** — publish/subscribe, where sensors push data and services consume it in real time. The Pi would publish readings into D1 via Workers. But this morning we're working with seeded test data on my local machine — same MCP server, same tools, same everything.
 
-The MCP server exposes 8 tools. The AI discovers them at connection time and picks the right one based on your question. No special prompting needed.
+The server exposes 8 tools. Here's the key bit: when an MCP client connects, it calls `tools/list` and the server sends back a JSON description of every tool — name, what it does, what parameters it takes. The LLM reads those descriptions and decides which tool to call based on your natural language question. There's no Workers AI or special Cloudflare magic doing the translation — it's the LLM itself (whatever model your MCP host is using — Claude, GPT, etc.) that interprets the tool descriptions and maps your question to the right function call with the right parameters. MCP just gives the LLM the menu; the LLM orders from it.
 
 ---
 
 ## Slide 13 — Live Demo
 
-This is the fun part. I'm running the MCP server locally with `wrangler dev` — same code that deploys to Workers, same D1 database, same MCP protocol. The URL is just `localhost:8790/sse`. I've already added it to my IDE's MCP config.
+I'm running the MCP server locally with `wrangler dev` — same code that deploys to Workers, same D1 database, same MCP protocol. The URL is just `localhost:8790/sse`. I've already added it to my IDE's MCP config.
 
-I'm going to switch to my terminal and ask it some real questions — "What's the air quality in Riverside Ward?", "Compare flood levels between Parklands and Industrial", "Which bins need collecting?" Watch how the LLM reads the tool descriptions, picks the right tool and parameters, the MCP server queries D1, and you get the answer in plain English.
+I'm going to switch to Windsurf now and ask some real questions. Watch the flow: the LLM reads the tool descriptions, picks the right tool and parameters, the MCP server queries D1, and the answer comes back in plain English.
 
-This is the whole point of MCP in action — I built this server once and any AI host can query this borough data. When I'm ready to go live, it's just `wrangler deploy`.
-
----
-
-## Slide 14 — How MCP Talks
-
-Quick look at how MCP communicates. The current transport is **Streamable HTTP** — the client sends JSON-RPC requests over a standard HTTP POST to a single endpoint. The server can respond inline or upgrade to SSE (Server-Sent Events) for streaming long-running results.
-
-The key point: it's just HTTP. No WebSockets required, no proprietary protocols. Works through firewalls, uses standard OAuth for auth, you can debug it with curl. That's what makes remote MCP servers practical — deploy behind any CDN or load balancer and it just works.
+Quick note on how this works under the hood — the transport is **Streamable HTTP**. The client sends JSON-RPC over a standard HTTP POST to a single endpoint. The server can respond inline or upgrade to **SSE** (Server-Sent Events) for streaming results. It's just HTTP — works through firewalls, you can debug it with curl.
 
 ---
 
-## Slide 15 — Deploy & Connect
+## Slide 14 — Deploy & Connect
 
 One command: `npx wrangler deploy`. Live globally on Workers, D1 bound, Durable Objects backing each session. 300+ cities, zero cold starts.
 
 Connect with a few lines of JSON — paste the SSE endpoint URL into any MCP host. Built-in OAuth support for scoped permissions. No local installs needed — it's a remote server on the internet.
 
-Anything with an API can become an MCP server. With Cloudflare you get the global edge, the serverless runtime, and the data layer all in one. Check out the Cloudflare MCP docs to get started. Thanks everyone.
+Anything with an API can become an MCP server. With Cloudflare you get the global edge, the serverless runtime, and the data layer all in one. Check out the Cloudflare MCP docs to get started.
+
+---
+
+## Slide 15 — Thank You
+
+And of course, no models were harmed in the production of this content. Thank you everyone, happy to take questions.
 
 ---
 
