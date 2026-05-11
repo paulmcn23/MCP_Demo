@@ -737,7 +737,7 @@ const html = `<!DOCTYPE html>
 <div class="slide" data-slide="14">
   <h2 style="margin-bottom:0.5rem;">Thank <span class="teal">You</span></h2>
   <div style="margin:1rem 0;">
-    <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QC8RXhpZgAATU0AKgAAAAgABQESAAMAAAABAAEAAAEaAAUAAAABAAAASgEbAAUAAAABAAAAUgEoAAMAAAABAAIAAIdpAAQAAAABAAAAWgAAAAAAAABIAAAAAQAAAEgAAAABAAeQAAAHAAAABDAyMjGRAQAHAAAABAECAwCgAAAHAAAABDAxMDCgAQADAAAAAQABAACgAgAEAAAAAQAAAJagAwAEAAAAAQAAAJakBgADAAAAAQAAAAAAAAAA/8AAEQgAlgCWAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEBAAAAAAAAAAABAgMEBQYHCAkKC//EALUQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5+v/EAB8BAAMBAQEBAQEBAQEAAAAAAAABAgMEBQYHCAkKC//EALURAAIBAgQEAwQHBQQEAAECdwABAgMRBAUhMQYSQVEHYXETIjKBCBRCkaGxwQkjM1LwFWJy0QoWJDThJfEXGBkaJicoKSo1Njc4OTpDREVGR0hJSlNUVVZXWFlaY2RlZmdoaWpzdHV2d3h5eoKDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uLj5OXm5+jp6vLz9PX29/j5+v/bAEMAAgICAgICAwICAwUDAwMFBgUFBQUGCAYGBgYGCAoICAgICAgKCgoKCgoKCgwMDAwMDA4ODg4ODw8PDw8PDw8PD//bAEMBAgICBAQEBwQEBxALCQsQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEP/dAAQACv/aAAwDAQACEQMRAD8A/SPxr8UrbSLtILeQEHvXA6r8b7ezjVVmG5sd6/P/AOIfxNvZr140LGROhry9fH011tMspMinp3r5fHZ/Xc2onNChGx+y3hj4waZLYJJdTDcw9a0PEfxd0ixtkkjmBLEd6/IKw+KVxagW8jsuPUkV1EnjWfVrQs0zEemeamjxTXtyyQfVle5+xvgzxVY+JdPSe3cEketdk4JFflL8I/jZN4XxBey5jXpk9vSvsvQP2gtC1CFXuZVAI9hX0WV8RUq0VzuzMalFrY+hvKpWgwK4LQPiLpGvyhLVshq9HaePaCe4r6GFZTV4mFjNaJh71GUfpitVbm2C89azri+iViq0OrYaptiJbsThq0lsYWTn9Kwf7TAOM1Kuqdg1ZusmXGmXpLGNCTniq5gjAIDGs+51lVGGOayRrYLkCo9qacpsSQAHiqpQjNPS9WUZz1oJyNwPFVGsRKmVSQDzTtwpxjZ+QM1Ils7HCjmtlLQz12IiM0bRVlraVPvKfypnlP8A3T+VUXyI/9DwzxJbzo8kgDSs/wCOPxrifCnhrULjxTFNdoy27EKc/WveNHiW/tQ8ygsRzmu+0TwrFMrPBgOvJ4FfmOHxz9quZCcdNDLvPhPp+pCG5GImUZP+1Xleraa/hzVGsy/7gcg17Vqlt4pQNBYPgJ3J6+3FeDeKYNTu52tLrmd/lznvX0dd06kbqJnG5DfazAkZFi4YqOo9ataF4ovpbmK1eUoAegPBrir/AMLal4atFmuJNyng571WsdUsrLF+7gNGema+WrVI0Klpbmi1P1o+Ct3pq2kM88ojyAcsfSvSfFXxm0XQdQjs3u1wxxwc1+NmoftHavp1kbbQywYfLkdOO9eUr8QvGXi...[8746 bytes truncated]" style="width:180px;height:180px;object-fit:cover;border-radius:16px;border:2px solid #35353d;" alt="The real model">
+    <img id="thankyou-model" src="" style="width:180px;height:180px;object-fit:cover;border-radius:16px;border:2px solid #35353d;" alt="The real model">
   </div>
   <p style="font-size:1.1rem;opacity:0.7;margin-bottom:1.5rem;font-style:italic;">No models were harmed in the production of this content.</p>
   <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
@@ -1039,6 +1039,13 @@ const html = `<!DOCTYPE html>
     for(let i=0;i<5;i++) document.getElementById('md'+i).classList.toggle('active',i<=mcpstep);
     s.run();
   }
+
+  /* Copy model photo to thank-you slide */
+  (function(){
+    const src = document.querySelector('#mcp-joke img');
+    const dst = document.getElementById('thankyou-model');
+    if(src && dst) dst.src = src.src;
+  })();
 
   function mcpReset() {
     mcpstep = -1;
