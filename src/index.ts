@@ -492,38 +492,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 9 — Client Side: Roots & Sampling ═══════ -->
+<!-- ═══════ SLIDE 9 — Server Side: Tools, Resources, Prompts ═══════ -->
 <div class="slide" data-slide="8">
-  <span class="tag">Client Side</span>
-  <h2>Client Primitives: <span class="teal">Roots</span> & <span class="purple">Sampling</span></h2>
-  <p style="text-align:center;opacity:0.6;margin-bottom:1.2rem;">On the client side, two primitives complete the picture.</p>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;max-width:700px;width:100%;">
-    <div class="card">
-      <div class="card-icon">📂</div>
-      <h3 style="color:#a3e635;">Roots</h3>
-      <p>Creates a secure channel for file access. The AI can open documents, read code, and analyse data files — <em>without</em> unrestricted access to your entire file system.</p>
-      <div style="display:flex;gap:0.8rem;margin-top:0.8rem;justify-content:center;">
-        <span style="font-size:1.5rem;">📁</span>
-        <span style="font-size:1.5rem;">💻</span>
-        <span style="font-size:1.5rem;">🔍</span>
-      </div>
-      <div style="display:flex;gap:1.5rem;justify-content:center;margin-top:0.3rem;">
-        <span style="font-size:0.65rem;opacity:0.4;">opening</span>
-        <span style="font-size:0.65rem;opacity:0.4;">reading</span>
-        <span style="font-size:0.65rem;opacity:0.4;">analysing</span>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-icon">🔗</div>
-      <h3 style="color:#a78bfa;">Sampling</h3>
-      <p>Enables a server to request the LLM's help. If an MCP server is analysing your database schema and needs to generate a query, it asks the LLM through sampling.</p>
-      <p style="font-size:0.78rem;opacity:0.5;margin-top:0.5rem;text-align:center;">This creates a <strong>two-way interaction</strong> — both the AI and external tools can initiate requests to each other.</p>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════ SLIDE 10 — Server Side: Tools, Resources, Prompts ═══════ -->
-<div class="slide" data-slide="9">
   <span class="tag">Server Capabilities</span>
   <h2>What MCP Servers <span class="teal">Expose</span></h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">Three major things inside every MCP server — <strong>TRP</strong>: Tools, Resources, Prompt Templates.</p>
@@ -557,8 +527,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 11 — Practical Example: OpenCode + Google Workspace ═══════ -->
-<div class="slide" data-slide="10">
+<!-- ═══════ SLIDE 10 — Practical Example: OpenCode + Google Workspace ═══════ -->
+<div class="slide" data-slide="9">
   <span class="tag">In Practice</span>
   <h2>OpenCode + <span class="teal">Google Workspace</span> via MCP</h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">No custom integration needed — just an MCP server for Google Workspace.</p>
@@ -593,8 +563,8 @@ const html = `<!DOCTYPE html>
   <p style="text-align:center;font-size:0.78rem;opacity:0.45;margin-top:0.8rem;">We use Google Workspace at Cloudflare · This is a real use case for our teams</p>
 </div>
 
-<!-- ═══════ SLIDE 12 — Ecosystem & Summary ═══════ -->
-<div class="slide" data-slide="11">
+<!-- ═══════ SLIDE 11 — Ecosystem & Summary ═══════ -->
+<div class="slide" data-slide="10">
   <span class="tag">Growing Ecosystem</span>
   <h2>MCP is <span class="teal">Everywhere</span></h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">Developers have already built integrations for the tools teams use every day.</p>
@@ -625,42 +595,8 @@ const html = `<!DOCTYPE html>
   <p style="text-align:center;font-size:0.78rem;opacity:0.45;margin-top:0.8rem;">Now let's build one ourselves — on Cloudflare.</p>
 </div>
 
-<!-- ═══════ SLIDE 13 — Let's Build on Cloudflare ═══════ -->
-<div class="slide" data-slide="12">
-  <span class="tag">Build Section</span>
-  <h2>Let's Build an MCP Server on <span class="teal">Cloudflare</span></h2>
-  <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">Cloudflare Workers + Agents SDK = remote MCP servers with durable state, zero cold starts, global edge deployment.</p>
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;max-width:720px;width:100%;">
-    <div class="card" style="text-align:center;">
-      <div class="card-icon">🏗️</div>
-      <h3 style="color:#fbbf24;">McpAgent</h3>
-      <p>Extend the <code style="background:#35353d;padding:2px 6px;border-radius:4px;font-size:0.75rem;">McpAgent</code> class from the Agents SDK. Each instance is a Durable Object with its own SQL store.</p>
-    </div>
-    <div class="card" style="text-align:center;">
-      <div class="card-icon">🗄️</div>
-      <h3 style="color:#a78bfa;">D1 Database</h3>
-      <p>Cloudflare's serverless SQL (SQLite at the edge). Bind it to your Worker and query it directly from your MCP tools.</p>
-    </div>
-    <div class="card" style="text-align:center;">
-      <div class="card-icon">⚡</div>
-      <h3 style="color:#2dd4bf;">Workers Runtime</h3>
-      <p>Deploy globally. No containers, no cold starts. Your MCP server runs at the edge, close to your users. <code style="background:#35353d;padding:2px 6px;border-radius:4px;font-size:0.75rem;">wrangler deploy</code> and you're live.</p>
-    </div>
-  </div>
-  <div class="code-block" style="margin-top:1rem;font-size:0.72rem;">
-    <span style="color:#555;">// The minimal Cloudflare MCP server</span><br>
-    <span style="color:#c792ea;">import</span> { McpAgent } <span style="color:#c792ea;">from</span> <span style="color:#34d399;">"agents/mcp"</span>;<br>
-    <span style="color:#c792ea;">import</span> { McpServer } <span style="color:#c792ea;">from</span> <span style="color:#34d399;">"@modelcontextprotocol/sdk/server/mcp.js"</span>;<br>
-    <br>
-    <span style="color:#c792ea;">export class</span> <span style="color:#fbbf24;">MyMCP</span> <span style="color:#c792ea;">extends</span> McpAgent {<br>
-    &nbsp;&nbsp;server = <span style="color:#c792ea;">new</span> McpServer({ <span style="color:#a78bfa;">name</span>: <span style="color:#34d399;">"Demo"</span>, <span style="color:#a78bfa;">version</span>: <span style="color:#34d399;">"1.0.0"</span> });<br>
-    &nbsp;&nbsp;<span style="color:#c792ea;">async</span> <span style="color:#6b9fff;">init</span>() { <span style="color:#555;">/* register tools, resources, prompts */</span> }<br>
-    }
-  </div>
-</div>
-
-<!-- ═══════ SLIDE 14 — Connected Council Case Study ═══════ -->
-<div class="slide" data-slide="13">
+<!-- ═══════ SLIDE 12 — Connected Council Case Study ═══════ -->
+<div class="slide" data-slide="11">
   <span class="tag">Case Study</span>
   <h2>Connected Council: <span class="teal">Smart Borough</span> MCP Server</h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:0.8rem;">A real MCP server on Cloudflare Workers — borough-wide data accessible via natural language.</p>
@@ -698,8 +634,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 15 — Live Demo ═══════ -->
-<div class="slide" data-slide="14">
+<!-- ═══════ SLIDE 13 — Live Demo ═══════ -->
+<div class="slide" data-slide="12">
   <span class="tag">Live Demo</span>
   <h2>Let's <span class="teal">Query It</span></h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">Running locally with <code>wrangler dev</code>. Same code, same D1 database, same MCP protocol.</p>
@@ -734,8 +670,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 16 — How MCP Talks ═══════ -->
-<div class="slide" data-slide="15">
+<!-- ═══════ SLIDE 14 — How MCP Talks ═══════ -->
+<div class="slide" data-slide="13">
   <span class="tag">Under the Hood</span>
   <h2>How MCP <span class="teal">Talks</span></h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">MCP uses standard HTTP — no proprietary protocols, no SDKs on the client side.</p>
@@ -767,8 +703,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 18 — Deploy & Connect ═══════ -->
-<div class="slide" data-slide="16">
+<!-- ═══════ SLIDE 15 — Deploy & Connect ═══════ -->
+<div class="slide" data-slide="14">
   <span class="tag">Ship It</span>
   <h2>Deploy & <span class="teal">Connect</span></h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">One command to deploy. Any MCP host can connect instantly.</p>

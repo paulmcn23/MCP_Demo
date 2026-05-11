@@ -1,6 +1,6 @@
 # MCP Explained — Presenter Script
 
-*17 slides · ~15–20 minutes · press → to advance*
+*15 slides · ~15–20 minutes · press → to advance*
 
 ---
 
@@ -25,13 +25,16 @@ Let's break down the name — each word matters.
 
 **[Step 4]** **Protocol** — When I meet the King, simply a set of rules. HTTP defines how browsers talk to servers. MCP defines how AI applications talk to external tools. An agreed-upon industry standard.
 
-**[Step 5]** And **Context** — context changes everything. You tell a doctor "I have a headache" and they hand you paracetamol. Add "I fell off a ladder an hour ago" and suddenly you're getting a CT scan. Same question, completely different answer. An LLM without context is that doctor without a patient history. Connect it to *your* data — your CRM, your databases, your emails — and the answers transform. Put them together: Model Context Protocol.
+**[Step 5]** And **Context** — context changes everything. You tell a doctor "I have a headache" and they hand you paracetamol. Add "I fell off a ladder an hour ago" and suddenly you're getting a CT scan. Same question, completely different answer. 
+An LLM without context is that doctor without a patient history. 
+Connect that LLM to *your* data — your CRM, your databases, your emails — and the answers transform. Put them together: Model Context Protocol.
 
 ---
 
 ## Slide 3 — The LLM On Its Own
 
-LLMs by themselves cannot take action. You tell ChatGPT to send an email — it says "Sorry, I can't do that." All it can do is predict the next text. "My Big Fat Greek..." — "Wedding." That's the ceiling.
+LLMs by themselves cannot take action. You tell gemini to send an email — it says "Sorry, I can't do that." All it can do is predict the next text. 
+"My Big Fat Greek..." — "Wedding." That's the ceiling.
 
 ---
 
@@ -41,7 +44,10 @@ LLMs by themselves cannot take action. You tell ChatGPT to send an email — it 
 
 **Step 2:** Connect the LLM to Salesforce, Gmail, your Wiki — it becomes much more powerful. Any tool becomes accessible.
 
-**Step 3:** Two things happen. First, the LLM can pull in **context** — ask it to analyse your customer data and it queries Salesforce directly. Second, it moves from knowledge to **action** — it can draft and send emails, not just write them. But here's the frustration: gluing multiple tools together is cumbersome. If you're wondering why we don't have Jarvis yet, this is why.
+**Step 3:** Two thinew superpowers . 
+First, the LLM can pull in **context** — ask it to analyse your customer data and it queries Salesforce directly. 
+Second, it moves from knowledge to **action** — it can draft and send emails, not just write them. 
+But here's the problem: puttinmg multiple tools together is complex. 
 
 ---
 
@@ -65,19 +71,24 @@ Without a standard, every connection is bespoke. Let's see this at scale.
 
 ## Slide 6 — The Evolution of LLMs
 
-Quick recap of the journey. Stage 1: LLM alone — can answer questions but can't act. Stage 2: LLMs plus tools — more powerful but fragile, one API change breaks everything. Stage 3: LLMs plus MCP — one protocol, all tools, plug and play.
+Quick recap of the journey. 
+Stage 1: LLM alone — can answer questions but can't act. Stage 2: LLMs plus tools — more powerful but fragile, one API change breaks everything. 
+Stage 3: LLMs plus MCP — one protocol, all tools, plug and play.
 
 ---
 
 ## Slide 7 — What is the Model Context Protocol?
 
-The MCP ecosystem has three components: **Host**, **Client**, and **Server**.
+The MCP ecosystem has three components: 
 
-**Hosts** are LLM applications — OpenCode, Windsurf, Cursor, Claude Desktop. The host contains an **MCP client** that maintains a connection to one or more **MCP servers**.
+**Hosts** are LLM applications — OpenCode, Windsurf, Cursor 
+The host contains an **MCP client** that maintains a connection to one or more **MCP servers**.
 
 MCP servers are lightweight programs that expose capabilities — a Google Drive server for file access, a Postgres server for database queries. There are now over 20,000 pre-built servers available.
 
-Here's the clever part: the MCP server is in the hands of the **service provider**. Anthropic said "We'll define the standard, you build the servers." That's why every major service provider is now building MCP servers. All Anthropic did was create a standard — and the entire industry is building on it.
+And the good part: the MCP server is in the hands of the **service provider**. 
+Anthropic said "We'll define the standard, you build the servers." That's why every major service provider is now building MCP servers. 
+All Anthropic did was create a standard — and the entire industry is building on it.
 
 ---
 
@@ -85,26 +96,20 @@ Here's the clever part: the MCP server is in the hands of the **service provider
 
 Three things on the **server side**, two on the **client side**.
 
+Client:
+- **Roots** — secure, scoped file access without exposing the full filesystem.
+- **Sampling** — the server can ask the LLM for help, making MCP bidirectional.
+
+
 Server:
 - **Tools** — functions the client can invoke. Query a database, send a message, search files.
 - **Resources** — read-only data exposed by the server. Logs, database records, files the client can query but not change.
 - **Prompt Templates** — structured blueprints so users don't have to engineer their own prompts. The server provides best-practice templates.
 
-Client:
-- **Roots** — secure, scoped file access without exposing the full filesystem.
-- **Sampling** — the server can ask the LLM for help, making MCP bidirectional.
 
 ---
 
-## Slide 9 — Client Primitives: Roots & Sampling
-
-Roots create a controlled sandbox — the AI accesses project files without exposing sensitive infrastructure.
-
-Sampling flips the direction — the server can ask the LLM for help. Processing a database schema and need a SQL query? Ask the LLM through sampling. This two-way flow is what makes MCP different from a traditional API.
-
----
-
-## Slide 10 — What MCP Servers Expose (Server Deep Dive)
+## Slide 9 — What MCP Servers Expose (Server Deep Dive)
 
 Every MCP server exposes Tools, Resources, and Prompt Templates. The key: the LLM discovers these **dynamically** at connection time.
 
@@ -112,13 +117,13 @@ A tool definition is just JSON — name, description, arguments. The LLM reads i
 
 ---
 
-## Slide 11 — Practical Example: OpenCode + Google Workspace
+## Slide 10 — Practical Example: OpenCode + Google Workspace
 
 We use Google Workspace at Cloudflare every day. With MCP, no custom integration needed — an MCP server for Google Workspace exposes Gmail, Drive, and Calendar. Paste a few lines of JSON config into OpenCode and you can say "draft a reply to the product team's email" or "find the Q3 planning doc." It just works.
 
 ---
 
-## Slide 12 — Ecosystem & Summary
+## Slide 11 — Ecosystem & Summary
 
 Over 20,000 pre-built MCP servers. Google Drive, Slack, GitHub, Postgres, and many more.
 
@@ -128,15 +133,7 @@ MCP doesn't replace APIs — it's an AI-friendly layer on top. Now let's build o
 
 ---
 
-## Slide 13 — Let's Build an MCP Server on Cloudflare
-
-On Cloudflare, you extend the **McpAgent** class from the Agents SDK. Each instance is backed by a Durable Object with persistent state. Pair it with **D1** — serverless SQLite at the edge — and your MCP tools query the database directly. No external calls, no connection strings.
-
-Run `wrangler deploy` and you're live globally. No containers, no cold starts. Import McpAgent, create a class, define tools, done.
-
----
-
-## Slide 14 — Connected Council: Smart Borough MCP Server
+## Slide 12 — Connected Council: Smart Borough MCP Server
 
 A real project: **Connected Council** — an MCP server for the fictional London Borough of Thornbridge. I do have a Raspberry Pi and physical sensors for this project, but I haven't connected them yet — so today we're working with seeded data in D1. Over 29,000 readings across 5 wards and 23 sensors — air quality, temperature, flood levels, bin fill, parking, noise, energy. The end goal is the Pi feeds real sensor data into D1, but the MCP server and tools are the same either way.
 
@@ -144,7 +141,7 @@ The MCP server exposes 8 tools. The AI discovers them at connection time and pic
 
 ---
 
-## Slide 15 — Live Demo
+## Slide 13 — Live Demo
 
 This is the fun part. I'm running the MCP server locally with `wrangler dev` — same code that deploys to Workers, same D1 database, same MCP protocol. The URL is just `localhost:8790/sse`. I've already added it to my IDE's MCP config.
 
@@ -154,7 +151,7 @@ This is the whole point of MCP in action — I built this server once and any AI
 
 ---
 
-## Slide 16 — How MCP Talks
+## Slide 14 — How MCP Talks
 
 Quick look at how MCP communicates. The current transport is **Streamable HTTP** — the client sends JSON-RPC requests over a standard HTTP POST to a single endpoint. The server can respond inline or upgrade to SSE (Server-Sent Events) for streaming long-running results.
 
@@ -162,7 +159,7 @@ The key point: it's just HTTP. No WebSockets required, no proprietary protocols.
 
 ---
 
-## Slide 17 — Deploy & Connect
+## Slide 15 — Deploy & Connect
 
 One command: `npx wrangler deploy`. Live globally on Workers, D1 bound, Durable Objects backing each session. 300+ cities, zero cold starts.
 
