@@ -1,6 +1,6 @@
 # MCP Explained — Presenter Script
 
-*15 slides (0–14) · ~15–20 minutes · press → to advance*
+*14 slides (0–13) · ~15–20 minutes · press → to advance*
 
 ---
 
@@ -123,27 +123,26 @@ We use Google Workspace at Cloudflare every day. With MCP, no custom integration
 
 ---
 
-## Slide 11 — Ecosystem & Summary
+## Slide 11 — Connected Council: Smart Borough MCP Server
 
-Over 20,000 pre-built MCP servers. Google Drive, Slack, GitHub, Postgres, and many more.
+A real project: **Connected Council** — an MCP server for the fictional London Borough of Thornbridge.
+ I do have a Raspberry Pi and physical sensors for this project, but I haven't connected them yet. 
+ The bigger vision here is building a **pub/sub model on Cloudflare** — publish/subscribe, where sensors push data and services consume it in real time. 
+ The Pi would publish readings into D1 via Workers. 
+ But this morning we're working with seeded test data on my local machine — same MCP server, same tools, same everything.
 
-Three things: **One Standard** — USB-C for AI. **Build Once** — every compatible client can use it. **Open Source** — anyone can contribute.
-
-MCP doesn't replace APIs — it's an AI-friendly layer on top. Now let's build one on Cloudflare.
-
----
-
-## Slide 12 — Connected Council: Smart Borough MCP Server
-
-A real project: **Connected Council** — an MCP server for the fictional London Borough of Thornbridge. I do have a Raspberry Pi and physical sensors for this project, but I haven't connected them yet. The bigger vision here is building a **pub/sub model on Cloudflare** — publish/subscribe, where sensors push data and services consume it in real time. The Pi would publish readings into D1 via Workers. But this morning we're working with seeded test data on my local machine — same MCP server, same tools, same everything.
-
-The server exposes 8 tools. Here's the key bit: when an MCP client connects, it calls `tools/list` and the server sends back a JSON description of every tool — name, what it does, what parameters it takes. The LLM reads those descriptions and decides which tool to call based on your natural language question. There's no Workers AI or special Cloudflare magic doing the translation — it's the LLM itself (whatever model your MCP host is using — Claude, GPT, etc.) that interprets the tool descriptions and maps your question to the right function call with the right parameters. MCP just gives the LLM the menu; the LLM orders from it.
+The server exposes 8 tools. 
+Here's the key bit: when an MCP client connects, it calls `tools/list` and the server sends back a JSON description of every tool — name, what it does, what parameters it takes. 
+The LLM reads those descriptions and decides which tool to call based on your natural language question. 
+There's no Workers AI or special Cloudflare magic doing the translation — it's the LLM itself (whatever model your MCP host is using — Claude, GPT, etc.) that interprets the tool descriptions and maps your question to the right function call with the right parameters. 
+MCP just gives the LLM the menu; the LLM orders from it.
 
 ---
 
-## Slide 13 — Live Demo
+## Slide 12 — Live Demo
 
-I'm running the MCP server locally with `wrangler dev` — same code that deploys to Workers, same D1 database, same MCP protocol. The URL is just `localhost:8790/sse`. I've already added it to my IDE's MCP config.
+I'm running the MCP server locally with `wrangler dev` — The URL is just `localhost:8790/sse`.
+I've already added it to Windsurf MCP config.
 
 I'm going to switch to Windsurf now and ask some real questions. Watch the flow: the LLM reads the tool descriptions, picks the right tool and parameters, the MCP server queries D1, and the answer comes back in plain English.
 
@@ -151,7 +150,7 @@ Quick note on how this works under the hood — the transport is **Streamable HT
 
 ---
 
-## Slide 14 — Deploy & Connect
+## Slide 13 — Deploy & Connect
 
 One command: `npx wrangler deploy`. Live globally on Workers, D1 bound, Durable Objects backing each session. 300+ cities, zero cold starts.
 
@@ -161,7 +160,7 @@ Anything with an API can become an MCP server. With Cloudflare you get the globa
 
 ---
 
-## Slide 15 — Thank You
+## Slide 14 — Thank You
 
 And of course, no models were harmed in the production of this content. Thank you everyone, happy to take questions.
 

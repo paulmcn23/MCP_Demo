@@ -563,40 +563,8 @@ const html = `<!DOCTYPE html>
   <p style="text-align:center;font-size:0.78rem;opacity:0.45;margin-top:0.8rem;">We use Google Workspace at Cloudflare · This is a real use case for our teams</p>
 </div>
 
-<!-- ═══════ SLIDE 11 — Ecosystem & Summary ═══════ -->
+<!-- ═══════ SLIDE 11 — Connected Council Case Study ═══════ -->
 <div class="slide" data-slide="10">
-  <span class="tag">Growing Ecosystem</span>
-  <h2>MCP is <span class="teal">Everywhere</span></h2>
-  <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">Developers have already built integrations for the tools teams use every day.</p>
-  <div class="eco-row">
-    <div class="eco-item"><span class="eco-icon">📁</span><span class="eco-name">Google Drive</span></div>
-    <div class="eco-item"><span class="eco-icon">💬</span><span class="eco-name">Slack</span></div>
-    <div class="eco-item"><span class="eco-icon">🐙</span><span class="eco-name">GitHub</span></div>
-    <div class="eco-item"><span class="eco-icon">🔀</span><span class="eco-name">Git</span></div>
-    <div class="eco-item"><span class="eco-icon">🐘</span><span class="eco-name">Postgres</span></div>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;max-width:700px;width:100%;margin-top:1rem;">
-    <div class="card" style="text-align:center;">
-      <div class="card-icon">🔌</div><h3>One Standard</h3>
-      <p>Replace N×M integrations with one universal protocol.</p>
-    </div>
-    <div class="card" style="text-align:center;">
-      <div class="card-icon">🧩</div><h3>Build Once</h3>
-      <p>Create a server, every AI client can use it.</p>
-    </div>
-    <div class="card" style="text-align:center;">
-      <div class="card-icon">🌍</div><h3>Open Source</h3>
-      <p>SDKs in TypeScript, Python, and more. Accessible to all.</p>
-    </div>
-  </div>
-  <div style="background:#27272d;border:1px solid #35353d;border-radius:12px;padding:0.6rem 1.2rem;max-width:700px;width:100%;margin-top:0.8rem;text-align:center;">
-    <p style="font-size:0.78rem;opacity:0.6;">💡 MCP doesn't replace APIs — it's an <strong>AI-friendly layer on top</strong>. Under the hood, MCP servers are often wrappers around existing REST APIs.</p>
-  </div>
-  <p style="text-align:center;font-size:0.78rem;opacity:0.45;margin-top:0.8rem;">Now let's build one ourselves — on Cloudflare.</p>
-</div>
-
-<!-- ═══════ SLIDE 12 — Connected Council Case Study ═══════ -->
-<div class="slide" data-slide="11">
   <span class="tag">Case Study</span>
   <h2>Connected Council: <span class="teal">Smart Borough</span> MCP Server</h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:0.8rem;">A real MCP server on Cloudflare Workers — borough-wide data accessible via natural language.</p>
@@ -631,8 +599,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 13 — Live Demo ═══════ -->
-<div class="slide" data-slide="12">
+<!-- ═══════ SLIDE 12 — Live Demo ═══════ -->
+<div class="slide" data-slide="11">
   <span class="tag">Live Demo</span>
   <h2>Let's <span class="teal">Query It</span></h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">Running locally with <code>wrangler dev</code>. Same code, same D1 database, same MCP protocol.</p>
@@ -679,8 +647,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 14 — Deploy & Connect ═══════ -->
-<div class="slide" data-slide="13">
+<!-- ═══════ SLIDE 13 — Deploy & Connect ═══════ -->
+<div class="slide" data-slide="12">
   <span class="tag">Ship It</span>
   <h2>Deploy & <span class="teal">Connect</span></h2>
   <p style="text-align:center;opacity:0.6;margin-bottom:1rem;">One command to deploy. Any MCP host can connect instantly.</p>
@@ -733,8 +701,8 @@ const html = `<!DOCTYPE html>
   </div>
 </div>
 
-<!-- ═══════ SLIDE 15 — Thank You ═══════ -->
-<div class="slide" data-slide="14">
+<!-- ═══════ SLIDE 14 — Thank You ═══════ -->
+<div class="slide" data-slide="13">
   <h2 style="margin-bottom:0.5rem;">Thank <span class="teal">You</span></h2>
   <div style="margin:1rem 0;">
     <img id="thankyou-model" src="" style="width:180px;height:180px;object-fit:cover;border-radius:16px;border:2px solid #35353d;" alt="The real model">
