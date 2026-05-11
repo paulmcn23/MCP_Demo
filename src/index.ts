@@ -565,8 +565,8 @@ const html = `<!DOCTYPE html>
 
 <!-- ═══════ SLIDE 11 — Connected Council Case Study ═══════ -->
 <div class="slide" data-slide="10">
-  <span class="tag">Case Study</span>
-  <h2>Connected Council: <span class="teal">Smart Borough</span> MCP Server</h2>
+  <h2>Connected Council</h2>
+  <p style="text-align:center;font-size:1.3rem;opacity:0.7;margin-top:-0.3rem;margin-bottom:0.5rem;"><span class="teal">Smart Borough</span> MCP Server</p>
   <p style="text-align:center;opacity:0.6;margin-bottom:0.8rem;">A real MCP server on Cloudflare Workers — borough-wide data accessible via natural language.</p>
   <div style="display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;justify-content:center;max-width:750px;margin-bottom:0.8rem;">
     <div class="dbox dbox-blue" style="width:130px;">

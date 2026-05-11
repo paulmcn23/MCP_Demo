@@ -23,9 +23,12 @@ Let's break down the name — each word matters.
 
 **[Step 3]** Okay, the *real* model. That's the LLM — ChatGPT, Claude, Gemini. Brilliant at conversation and strategy, but on its own it cannot act.
 
-**[Step 4]** **Protocol** — When I meet the King, simply a set of rules. HTTP defines how browsers talk to servers. MCP defines how AI applications talk to external tools. An agreed-upon industry standard.
+**[Step 4]** **Protocol** —
+ When I meet the King, simply a set of rules. 
+HTTP defines how browsers talk to servers. MCP defines how AI applications talk to external tools. An agreed-upon industry standard.
 
-**[Step 5]** And **Context** — context changes everything. You tell a doctor "I have a headache" and they hand you paracetamol. Add "I fell off a ladder an hour ago" and suddenly you're getting a CT scan. Same question, completely different answer. 
+**[Step 5]** And **Context** — context changes everything. 
+You tell a doctor "I have a headache" and they hand you paracetamol. Add "I fell off a ladder an hour ago" and suddenly you're getting a CT scan. Same question, completely different answer. 
 An LLM without context is that doctor without a patient history. 
 Connect that LLM to *your* data — your CRM, your databases, your emails — and the answers transform. Put them together: Model Context Protocol.
 
@@ -40,20 +43,21 @@ LLMs by themselves cannot take action. You tell gemini to send an email — it s
 
 ## Slide 4 — With Tools, AI Models Gain New Capabilities (Interactive)
 
-**Step 1:** The next evolution: combining LLMs with tools. Perplexity lets you chat with an LLM that can search the web. The LLM itself can't do that — they gave it access to an external service.
+**Step 1:** The next evolution: combining LLMs with tools. 
+Gemini lets you chat with an LLM that can search the web. The LLM itself can't do that -- Google trained it to call a search tool, and that tool does the actual fetching.
 
 **Step 2:** Connect the LLM to Salesforce, Gmail, your Wiki — it becomes much more powerful. Any tool becomes accessible.
 
-**Step 3:** Two thinew superpowers . 
+**Step 3:** Two new superpowers . 
 First, the LLM can pull in **context** — ask it to analyse your customer data and it queries Salesforce directly. 
 Second, it moves from knowledge to **action** — it can draft and send emails, not just write them. 
-But here's the problem: puttinmg multiple tools together is complex. 
+But putting multiple tools together is complex. 
 
 ---
 
 ## Slide 5 — The N×M Problem, MCP Standard & Reuse (Interactive)
 
-Without a standard, every connection is bespoke. Let's see this at scale.
+Without a standard, every connection is bespoke. 
 
 **Step 1:** LLM vendors on the left — Anthropic, DeepSeek, OpenAI. Tools on the right — Slack, Google Drive, GitHub.
 
@@ -87,7 +91,6 @@ The host contains an **MCP client** that maintains a connection to one or more *
 MCP servers are lightweight programs that expose capabilities — a Google Drive server for file access, a Postgres server for database queries. There are now over 20,000 pre-built servers available.
 
 And the good part: the MCP server is in the hands of the **service provider**. 
-Anthropic said "We'll define the standard, you build the servers." That's why every major service provider is now building MCP servers. 
 All Anthropic did was create a standard — and the entire industry is building on it.
 
 ---
@@ -111,9 +114,11 @@ Server:
 
 ## Slide 9 — What MCP Servers Expose (Server Deep Dive)
 
-Every MCP server exposes Tools, Resources, and Prompt Templates. The key: the LLM discovers these **dynamically** at connection time.
+Every MCP server exposes Tools, Resources, and Prompt Templates. 
+The key: the LLM discovers these **dynamically** at connection time.
 
-A tool definition is just JSON — name, description, arguments. The LLM reads it and knows exactly what it can do. Add a new tool and the AI picks it up automatically — no redeployment needed. This is **Dynamic Discovery**.
+A tool definition is just JSON — name, description, arguments. The LLM reads it and knows exactly what it can do. Add a new tool and the AI picks it up automatically — no redeployment needed. 
+This is **Dynamic Discovery**.
 
 ---
 
@@ -125,10 +130,10 @@ We use Google Workspace at Cloudflare every day. With MCP, no custom integration
 
 ## Slide 11 — Connected Council: Smart Borough MCP Server
 
-A real project: **Connected Council** — an MCP server for the fictional London Borough of Thornbridge.
- I do have a Raspberry Pi and physical sensors for this project, but I haven't connected them yet. 
- The bigger vision here is building a **pub/sub model on Cloudflare** — publish/subscribe, where sensors push data and services consume it in real time. 
- The Pi would publish readings into D1 via Workers. 
+A real project: **Connected Council** — an MCP server for the a Borough of mine. 
+ I do have a Raspberry Pi and physical sensors for this project, but I sat on the sensor this morning, not a great idea! 
+ The bigger side project here is building a **pub/sub model on Cloudflare** — publish/subscribe, where sensors push data and services consume it in real time. 
+ The Pi would publish readings over Cloudflare Mesh into D1 via Workers. 
  But this morning we're working with seeded test data on my local machine — same MCP server, same tools, same everything.
 
 The server exposes 8 tools. 
@@ -140,6 +145,10 @@ MCP just gives the LLM the menu; the LLM orders from it.
 ---
 
 ## Slide 12 — Live Demo
+
+Are there any critical alerts right now?
+Which bins need collecting?
+
 
 I'm running the MCP server locally with `wrangler dev` — The URL is just `localhost:8790/sse`.
 I've already added it to Windsurf MCP config.
